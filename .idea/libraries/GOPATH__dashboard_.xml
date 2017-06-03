@@ -1,0 +1,21 @@
+<component name="libraryTable">
+  <library name="GOPATH &lt;dashboard&gt;">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/../dashboard_052617" />
+      <root url="file://$PROJECT_DIR$/../dashboard_052517" />
+      <root url="file://$PROJECT_DIR$/../dashboard_052217" />
+      <root url="file://$PROJECT_DIR$/../dashboard_051517" />
+      <root url="file://$PROJECT_DIR$/../github.com" />
+    </CLASSES>
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/../dashboard_052617" />
+      <root url="file://$PROJECT_DIR$/../dashboard_052517" />
+      <root url="file://$PROJECT_DIR$/../dashboard_052217" />
+      <root url="file://$PROJECT_DIR$/../dashboard_051517" />
+      <root url="file://$PROJECT_DIR$/../github.com" />
+    </SOURCES>
+    <excluded>
+      <root url="file://$PROJECT_DIR$" />
+    </excluded>
+  </library>
+</component>

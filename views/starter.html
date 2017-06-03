@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+{{template "header.html"}}
+
+<body class="hold-transition skin-blue sidebar-mini fixed sidebar-collapse">
+    <input type="text" name="content" id="content" value={{.content}} hidden="true" />
+    <div class="wrapper">
+        <!-- Main Header -->
+        {{template "mainheader.html"}}
+        <!-- Left side column. contains the logo and sidebar -->
+        {{template "sidebar.html"}}
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            {{template "./overview/overview.html"}}
+        </div>
+        <!-- /.content-wrapper -->
+        <!-- Main Footer -->
+        {{template "footer.html"}}
+
+</body>
+
+</html>

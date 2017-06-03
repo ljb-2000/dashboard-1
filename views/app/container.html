@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html>
+{{template "header.html"}}
+
+<body class="hold-transition skin-blue sidebar-mini fixed">
+<style type="text/css">
+
+    #myTabContent .fixed-table-toolbar {
+        margin-top: -42px;
+    }
+
+    #myTabContent .bootstrap-table .columns.columns-right.btn-group.pull-right button {
+        background-color: #2db7f5 !important;
+        border: 1px solid #2db7f5 !important;
+    }
+
+    #myTabContent #minihub .bootstrap-table .columns.columns-right.btn-group.pull-right button {
+        margin-top: -10px;
+    }
+
+    table tbody tr td .serviceDetail .imgUrl {
+        margin-top: 5px;
+        margin-left: 5px;
+        float: left;
+        width: 50px;
+        height: 50px;
+        padding: 14px;
+        border-radius: 5px;
+        box-shadow: 0 0 5px #c2c2c2;
+    }
+
+
+    .CodeMirror-scroll {
+        overflow: scroll!important;
+        margin-bottom: -30px;
+        margin-right: -30px;
+        padding-bottom: 30px;
+        height: 100%;
+        outline: none;
+        position: relative;
+    }
+    .CodeMirror-gutter, .CodeMirror-gutters, .CodeMirror-linenumber, .CodeMirror-scroll, .CodeMirror-sizer {
+        box-sizing: content-box;
+    }
+    .CodeMirror-sizer {
+        position: relative;
+        border-right: 30px solid transparent;
+    }
+    .CodeMirror-lines {
+        cursor: text;
+        min-height: 1px;
+    }
+    .CodeMirror-lines {
+        padding: 4px 0;
+    }
+    .CodeMirror-measure {
+        position: absolute;
+        width: 100%;
+        height: 0;
+        overflow: hidden;
+        visibility: hidden;
+    }
+    .cm-s-monokai .CodeMirror-guttermarker-subtle, .cm-s-monokai .CodeMirror-linenumber {
+        color: #d0d0d0;
+    }
+    .CodeMirror-gutter, .CodeMirror-gutters, .CodeMirror-linenumber, .CodeMirror-scroll, .CodeMirror-sizer {
+        box-sizing: content-box;
+    }
+    .CodeMirror-gutter-elt {
+        position: absolute;
+        cursor: default;
+        z-index: 4;
+    }
+    .CodeMirror-linenumber {
+        padding: 0 3px 0 5px;
+        min-width: 20px;
+        text-align: right;
+        color: #999;
+        white-space: nowrap;
+    }
+    .cm-s-monokai .CodeMirror-cursor {
+        border-left: 1px solid #f8f8f0;
+    }
+    .cm-s-monokai .CodeMirror-cursor {
+        border-left: 1px solid #f8f8f0;
+    }
+    .CodeMirror-cursor {
+        position: absolute;
+        pointer-events: none;
+    }
+    .CodeMirror-cursor {
+        border-left: 1px solid #000;
+        border-right: none;
+        width: 0;
+    }
+    .CodeMirror-code {
+        outline: none;
+    }
+    .CodeMirror-gutter-wrapper {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+    }
+    .CodeMirror-gutter-wrapper {
+        position: absolute;
+        z-index: 4;
+        background: none!important;
+        border: none!important;
+    }
+    .cm-s-monokai .CodeMirror-guttermarker-subtle, .cm-s-monokai .CodeMirror-linenumber {
+        color: #d0d0d0;
+    }
+    .CodeMirror-wrap pre {
+        word-wrap: break-word;
+        white-space: pre-wrap;
+        word-break: normal;
+    }
+    .CodeMirror pre {
+        border-radius: 0;
+        border-width: 0;
+        background: transparent;
+        font-family: inherit;
+        font-size: inherit;
+        margin: 0;
+        white-space: pre;
+        word-wrap: normal;
+        line-height: inherit;
+        color: inherit;
+        z-index: 2;
+        position: relative;
+        overflow: visible;
+        -webkit-tap-highlight-color: transparent;
+        -webkit-font-variant-ligatures: contextual;
+        font-variant-ligatures: contextual;
+    }
+    .CodeMirror pre {
+        padding: 0 4px;
+    }
+    .cm-s-monokai span.cm-atom, .cm-s-monokai span.cm-number {
+        color: #ae81ff;
+    }
+    #AppDetail .ant-card {
+        overflow: visible;
+    }
+    .ant-card-bordered {
+        border: 1px solid #d9d9d9;
+        border-color: #e9e9e9;
+    }
+    .ant-card {
+        background: #fff;
+        border-radius: 4px;
+        font-size: 12px;
+        position: relative;
+        overflow: hidden;
+        -webkit-transition: all .3s;
+        transition: all .3s;
+    }
+    .ant-card-body {
+        padding: 24px;
+    }
+    #AppDetail .imgBox {
+        padding-top: 20px;
+        padding-left: 23px;
+        float: left;
+        width: 120px;
+        height: 120px;
+        border-radius: 10px;
+        box-shadow: 0 0 5px #c2c2c2;
+    }
+    #AppDetail .imgBox svg {
+        width: 80px;
+        height: 80px;
+        border-radius: 10px;
+    }
+    #AppDetail .imgBox svg use {
+        fill: #9aa5af;
+    }
+    #AppDetail .infoBox {
+        float: left;
+        width: calc(100% - 120px);
+        padding-left: 20px;
+        color: #666;
+    }
+    #AppDetail .infoBox .appTitle {
+        font-size: 16px;
+        color: #333;
+    }
+    #AppDetail .infoBox .leftInfo {
+        float: left;
+        width: 33%;
+        line-height: 35px;
+    }
+    .TenxStatus {
+        line-height: 30px;
+    }
+    .TenxStatus .Failed, .TenxStatus .Stopped, .TenxStatus .Stopping {
+        color: #f23e3f;
+        position: relative;
+        top: 5px;
+    }
+    #AppDetail .infoBox .leftInfo .status i {
+        margin: 0 5px;
+    }
+    #AppDetail .infoBox .leftInfo .appDetailDomain {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        width: 100%;
+        height: 35px;
+        line-height: 35px;
+    }
+    #AppDetail .infoBox .leftInfo .title {
+        display: inline-block;
+        width: auto;
+    }
+    #AppDetail .infoBox .leftInfo .addressRight {
+        width: calc(100% - 45px);
+        height: 100%;
+    }
+    .TipAppDomain {
+        position: relative;
+        height: 100%;
+        width: 100%;
+    }
+    .TipAppDomain .appDomain {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 80%;
+        float: left;
+    }
+    a {
+        color: #2db7f5;
+        background: transparent;
+        text-decoration: none;
+        outline: none;
+        cursor: pointer;
+        -webkit-transition: color .3s ease;
+        transition: color .3s ease;
+    }
+    .TipAppDomain .more {
+        display: inline-block;
+        position: absolute;
+        margin-left: 5px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 15px;
+        height: 16px;
+        cursor: pointer;
+    }
+    .TipAppDomain .more use {
+        fill: #eee;
+    }
+    #AppDetail .infoBox .middleInfo {
+        float: left;
+        width: 33%;
+        line-height: 35px;
+    }
+    #AppDetail .infoBox .rightInfo {
+        float: left;
+        width: 33%;
+    }
+    .ant-form-horizontal .ant-form-item {
+        position: relative;
+        margin-left: 0;
+        margin-right: 0;
+        height: auto;
+        zoom: 1;
+    }
+    .ant-form-item {
+        font-size: 12px;
+        margin-bottom: 24px;
+        color: #666;
+    }
+    .ant-row {
+        position: relative;
+        margin-left: 0;
+        margin-right: 0;
+        height: auto;
+        zoom: 1;
+        display: block;
+    }
+    .ant-form-item-control {
+        line-height: 32px;
+        position: relative;
+        zoom: 1;
+    }
+    #Application {
+        width: 100%;
+        overflow-x: hidden;
+    }
+    #AppServiceList .dataBox .instanceDetail:hover {
+        background-color: #f2f2f2;
+    }
+    #AppServiceList .dataBox .instanceDetail {
+        transition: all .3s;
+        line-height: 60px;
+        border-bottom: 1px solid #e5e5e5;
+    }
+    #AppServiceList .dataBox .selectIconTitle {
+        width: 5%;
+        text-align: center;
+    }
+    #AppServiceList .dataBox .commonData {
+        float: left;
+        padding-left: 5px;
+    }
+
+</style>
+
+<input type="text" name="content" id="content" value={{.content}} hidden="true" />
+<div class="wrapper">
+    {{template "../svg.html"}}
+    <!-- Main Header -->
+    {{template "../mainheader.html"}}
+    <!-- Left side column. contains the logo and sidebar -->
+    {{template "../sidebar.html"}}
+    <!-- Content Wrapper. Contains page content -->
+    {{template "../app/contentContainer.html"}}
+
+
+    <!---->
+    {{template "../app/addapp.html"}}
+    <!---->
+    {{template "../app/imageSelect.html"}}
+    <!---->
+    {{template "../app/scaleapp.html"}}
+    <!---->
+    {{template "../app/rollapp.html"}}
+    <!---->
+    {{template "../app/expensiveapp.html"}}
+    <!---->
+    <!-- Main Footer -->
+    {{template "../footer.html"}}
+
+</div>
+</body>
+
+
+<script type="text/javascript" src="../../static/plugins/d3/d3.js"></script>
+<script type="text/javascript" src="../../static/plugins/c3/c3.min.js"></script>
+<link rel="stylesheet" href="../../static/plugins/c3/c3.css">
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css"/>
+<script type="text/javascript">
+    $(document).ready(function () {
+        loadTable()
+    })
+
+    function loadTable() {
+        var data =  {"cluster":"CID-fab5b135e7b2","data":[{"metadata":{"name":"qqqq-2075252320-1kuak","generateName":"qqqq-2075252320-","namespace":"huangjia","selfLink":"/api/v1/namespaces/huangjia/pods/qqqq-2075252320-1kuak","uid":"e8eb02fc-4787-11e7-ba91-1418773517bc","resourceVersion":"54837730","creationTimestamp":"2017-06-02T11:37:51Z","labels":{"name":"qqqq","pod-template-hash":"2075252320","tenxcloud.com/appName":"rere","tenxcloud.com/svcName":"qqqq"},"annotations":{"kubernetes.io/created-by":"{\"kind\":\"SerializedReference\",\"apiVersion\":\"v1\",\"reference\":{\"kind\":\"ReplicaSet\",\"namespace\":\"huangjia\",\"name\":\"qqqq-2075252320\",\"uid\":\"1e836f0b-4770-11e7-ba91-1418773517bc\",\"apiVersion\":\"extensions\",\"resourceVersion\":\"54837673\"}}\n"},"ownerReferences":[{"apiVersion":"extensions/v1beta1","kind":"ReplicaSet","name":"qqqq-2075252320","uid":"1e836f0b-4770-11e7-ba91-1418773517bc","controller":true}]},"spec":{"volumes":[{"name":"default-token-7y5ba","secret":{"secretName":"default-token-7y5ba","defaultMode":420}}],"containers":[{"name":"qqqq","image":"index.tenxcloud.com/tenxcloud/lamp:latest","args":["/run.sh"],"ports":[{"containerPort":22,"protocol":"TCP"},{"containerPort":3306,"protocol":"TCP"},{"containerPort":80,"protocol":"TCP"}],"env":[{"name":"PATH","value":"/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"},{"name":"DEBIAN_FRONTEND","value":"noninteractive"},{"name":"PHP_UPLOAD_MAX_FILESIZE","value":"10M"},{"name":"PHP_POST_MAX_SIZE","value":"10M"},{"name":"MYSQL_USER","value":"admin"},{"name":"AUTHORIZED_KEYS","value":"**None**"}],"resources":{"limits":{"cpu":"1","memory":"512Mi"},"requests":{"cpu":"100m","memory":"512Mi"}},"volumeMounts":[{"name":"default-token-7y5ba","readOnly":true,"mountPath":"/var/run/secrets/kubernetes.io/serviceaccount"}],"terminationMessagePath":"/dev/termination-log","imagePullPolicy":"Always"}],"restartPolicy":"Always","terminationGracePeriodSeconds":30,"dnsPolicy":"ClusterFirst","serviceAccountName":"default","serviceAccount":"default","nodeName":"slave-node-3","securityContext":{}},"status":{"phase":"Running","conditions":[{"type":"Initialized","status":"True","lastProbeTime":null,"lastTransitionTime":"2017-06-02T11:37:51Z"},{"type":"Ready","status":"True","lastProbeTime":null,"lastTransitionTime":"2017-06-02T11:37:56Z"},{"type":"PodScheduled","status":"True","lastProbeTime":null,"lastTransitionTime":"2017-06-02T11:37:51Z"}],"hostIP":"192.168.11.8","podIP":"192.168.27.142","startTime":"2017-06-02T11:37:51Z","containerStatuses":[{"name":"qqqq","state":{"running":{"startedAt":"2017-06-02T11:37:56Z"}},"lastState":{},"ready":true,"restartCount":0,"image":"index.tenxcloud.com/tenxcloud/lamp:latest","imageID":"docker://sha256:6f5ac12ac4ab15fe82c56c8d3c69ca5c924bb3c894bcd8c409caede5b6cfa3e9","containerID":"docker://784b12b5666e4d2bf732ac8bb4ecc12312aa4f729d0eba4ff8644e0b30b7b626"}]},"images":["index.tenxcloud.com/tenxcloud/lamp:latest"]},{"metadata":{"name":"wwwww-88004621-xrajj","generateName":"wwwww-88004621-","namespace":"huangjia","selfLink":"/api/v1/namespaces/huangjia/pods/wwwww-88004621-xrajj","uid":"e8eb03bc-4787-11e7-ba91-1418773517bc","resourceVersion":"54837726","creationTimestamp":"2017-06-02T11:37:51Z","labels":{"name":"wwwww","pod-template-hash":"88004621","tenxcloud.com/appName":"rere","tenxcloud.com/svcName":"wwwww"},"annotations":{"kubernetes.io/created-by":"{\"kind\":\"SerializedReference\",\"apiVersion\":\"v1\",\"reference\":{\"kind\":\"ReplicaSet\",\"namespace\":\"huangjia\",\"name\":\"wwwww-88004621\",\"uid\":\"1e836800-4770-11e7-ba91-1418773517bc\",\"apiVersion\":\"extensions\",\"resourceVersion\":\"54837674\"}}\n"},"ownerReferences":[{"apiVersion":"extensions/v1beta1","kind":"ReplicaSet","name":"wwwww-88004621","uid":"1e836800-4770-11e7-ba91-1418773517bc","controller":true}]},"spec":{"volumes":[{"name":"default-token-7y5ba","secret":{"secretName":"default-token-7y5ba","defaultMode":420}}],"containers":[{"name":"wwwww","image":"index.tenxcloud.com/tenxcloud/lamp:latest","args":["/run.sh"],"ports":[{"containerPort":22,"protocol":"TCP"},{"containerPort":3306,"protocol":"TCP"},{"containerPort":80,"protocol":"TCP"}],"env":[{"name":"PATH","value":"/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"},{"name":"DEBIAN_FRONTEND","value":"noninteractive"},{"name":"PHP_UPLOAD_MAX_FILESIZE","value":"10M"},{"name":"PHP_POST_MAX_SIZE","value":"10M"},{"name":"MYSQL_USER","value":"admin"},{"name":"AUTHORIZED_KEYS","value":"**None**"}],"resources":{"limits":{"cpu":"1","memory":"512Mi"},"requests":{"cpu":"100m","memory":"512Mi"}},"volumeMounts":[{"name":"default-token-7y5ba","readOnly":true,"mountPath":"/var/run/secrets/kubernetes.io/serviceaccount"}],"terminationMessagePath":"/dev/termination-log","imagePullPolicy":"Always"}],"restartPolicy":"Always","terminationGracePeriodSeconds":30,"dnsPolicy":"ClusterFirst","serviceAccountName":"default","serviceAccount":"default","nodeName":"slave-node-3","securityContext":{}},"status":{"phase":"Running","conditions":[{"type":"Initialized","status":"True","lastProbeTime":null,"lastTransitionTime":"2017-06-02T11:37:51Z"},{"type":"Ready","status":"True","lastProbeTime":null,"lastTransitionTime":"2017-06-02T11:37:56Z"},{"type":"PodScheduled","status":"True","lastProbeTime":null,"lastTransitionTime":"2017-06-02T11:37:51Z"}],"hostIP":"192.168.11.8","podIP":"192.168.27.169","startTime":"2017-06-02T11:37:51Z","containerStatuses":[{"name":"wwwww","state":{"running":{"startedAt":"2017-06-02T11:37:56Z"}},"lastState":{},"ready":true,"restartCount":0,"image":"index.tenxcloud.com/tenxcloud/lamp:latest","imageID":"docker://sha256:6f5ac12ac4ab15fe82c56c8d3c69ca5c924bb3c894bcd8c409caede5b6cfa3e9","containerID":"docker://7327ef5bb956282a837749199c82c71515cfaad1ebcf5d26effd1f7016434914"}]},"images":["index.tenxcloud.com/tenxcloud/lamp:latest"]}],"total":2,"count":2}
+        $('#table').bootstrapTable({
+            striped: true, //是否显示行间隔色
+            cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+            pagination: true, //是否显示分页（*）
+            sortable: true, //是否启用排序
+            sortOrder: "ID asc", //排序方式
+            pageNumber: 1, //初始化加载第一页，默认第一页
+            pageSize: 20, //每页的记录行数（*）
+            pageList: [20, 50, 100, 150], //可供选择的每页的行数（*）
+            striped: true,
+            strictSearch: true,
+            clickToSelect: true,
+            singleSelect: true,
+            columns: [ {
+                field: "选择",
+                checkbox:  true,
+                title: "选择",
+                class: "tablebody",
+                align: "center",
+                valign: "middle"
+            }, {
+                field: 'appName',
+                title: '应用名称',
+                align: "center",
+                valign: "middle",
+                sortable: true,
+                formatter: function (value, row, index) {
+                    return "<a onclick=\"$('#MainContent').hide();$('#ContainerDetail').show();\">"+ row.metadata.name +"</a>"
+                }
+            }, {
+                field: 'appStatus',
+                title: '状态',
+                align: "center",
+                valign: "middle",
+                sortable: true,
+                formatter: function (value, row, index) {
+                    return row.status.phase
+                }
+            }, {
+                field: 'serviceName',
+                title: '所属应用',
+                align: "center",
+                valign: "middle",
+                sortable: true,
+                formatter: function (value, row, index) {
+                    return row.metadata.labels["tenxcloud.com/appName"]
+                }
+            }, {
+                field: 'imageName',
+                title: '镜像',
+                align: "center",
+                valign: "middle",
+                sortable: true,
+                formatter: function (value, row, index) {
+                    return row.images
+                }
+            }, {
+                field: 'visitIp',
+                title: '访问地址',
+                align: "center",
+                valign: "middle",
+                sortable: true,
+                formatter: function (value, row, index) {
+                    return row.status.hostIP
+                }
+            }],
+            data: data.data
+        });
+    }
+
+    function CPUChart() {
+        console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ,CPUChart")
+        var datas = {"cluster":"CID-fab5b135e7b2","containerName":"web1-3771192691-rkjkb","data":[{"containerName":"web1-3771192691-rkjkb","start":"2017-05-29T06:36:03.964Z","type":"cpu/usage_rate","metrics":[{"timestamp":"05-29 14:36","value":0,"floatValue":0.1},{"timestamp":"05-29 14:37","value":0,"floatValue":0.11},{"timestamp":"05-29 14:38","value":0,"floatValue":0.1},{"timestamp":"05-29 14:39","value":0,"floatValue":0.11},{"timestamp":"05-29 14:40","value":0,"floatValue":0.11},{"timestamp":"05-29 14:41","value":0,"floatValue":0.1},{"timestamp":"05-29 14:42","value":0,"floatValue":0.11},{"timestamp":"05-29 14:43","value":0,"floatValue":0.1},{"timestamp":"05-29 14:44","value":0,"floatValue":0.1},{"timestamp":"05-29 14:45","value":0,"floatValue":0.1},{"timestamp":"05-29 14:46","value":0,"floatValue":0.1},{"timestamp":"05-29 14:47","value":0,"floatValue":0.1},{"timestamp":"05-29 14:48","value":0,"floatValue":0.1},{"timestamp":"05-29 14:49","value":0,"floatValue":0.1},{"timestamp":"05-29 14:50","value":0,"floatValue":0.1},{"timestamp":"05-29 14:51","value":0,"floatValue":0.1},{"timestamp":"05-29 14:52","value":0,"floatValue":0.1},{"timestamp":"05-29 14:53","value":0,"floatValue":0.1},{"timestamp":"05-29 14:54","value":0,"floatValue":0.1},{"timestamp":"05-29 14:55","value":0,"floatValue":0.1},{"timestamp":"05-29 14:56","value":0,"floatValue":0.1},{"timestamp":"05-29 14:57","value":0,"floatValue":0.1},{"timestamp":"05-29 14:58","value":0,"floatValue":0.1},{"timestamp":"05-29 14:59","value":0,"floatValue":0.1},{"timestamp":"05-29 15:00","value":0,"floatValue":0.1},{"timestamp":"05-29 15:01","value":0,"floatValue":0.1},{"timestamp":"05-29 15:02","value":0,"floatValue":0.1},{"timestamp":"05-29 15:03","value":0,"floatValue":0.1},{"timestamp":"05-29 15:04","value":0,"floatValue":0.1},{"timestamp":"05-29 15:05","value":0,"floatValue":0.1},{"timestamp":"05-29 15:06","value":0,"floatValue":0.09},{"timestamp":"05-29 15:07","value":0,"floatValue":0.1},{"timestamp":"05-29 15:08","value":0,"floatValue":0.1},{"timestamp":"05-29 15:09","value":0,"floatValue":0.1},{"timestamp":"05-29 15:10","value":0,"floatValue":0.1},{"timestamp":"05-29 15:11","value":0,"floatValue":0.1},{"timestamp":"05-29 15:12","value":0,"floatValue":0.09},{"timestamp":"05-29 15:13","value":0,"floatValue":0.1},{"timestamp":"05-29 15:14","value":0,"floatValue":0.09},{"timestamp":"05-29 15:15","value":0,"floatValue":0.1},{"timestamp":"05-29 15:16","value":0,"floatValue":0.1},{"timestamp":"05-29 15:17","value":0,"floatValue":0.1},{"timestamp":"05-29 15:18","value":0,"floatValue":0.1},{"timestamp":"05-29 15:19","value":0,"floatValue":0.09},{"timestamp":"05-29 15:20","value":0,"floatValue":0.1},{"timestamp":"05-29 15:21","value":0,"floatValue":0.09},{"timestamp":"05-29 15:22","value":0,"floatValue":0.09},{"timestamp":"05-29 15:23","value":0,"floatValue":0.09},{"timestamp":"05-29 15:24","value":0,"floatValue":0.1},{"timestamp":"05-29 15:25","value":0,"floatValue":0.09},{"timestamp":"05-29 15:26","value":0,"floatValue":0.09},{"timestamp":"05-29 15:27","value":0,"floatValue":0.09},{"timestamp":"05-29 15:28","value":0,"floatValue":0.09},{"timestamp":"05-29 15:29","value":0,"floatValue":0.1},{"timestamp":"05-29 15:30","value":0,"floatValue":0.1},{"timestamp":"05-29 15:31","value":0,"floatValue":0.1},{"timestamp":"05-29 15:32","value":0,"floatValue":0.1},{"timestamp":"05-29 15:33","value":0,"floatValue":0.1},{"timestamp":"05-29 15:34","value":0,"floatValue":0.5},{"timestamp":"05-29 15:35","value":0,"floatValue":0.1},{"timestamp":"05-29 15:36","value":0,"floatValue":0.5}],"statusCode":200}]}
+        var data = [datas.containerName]
+        var tickValues = [datas.containerName]
+
+        var metrics = datas["data"][0]["metrics"]
+
+        var label = []
+        for(var a=0; a<metrics.length; a++){
+            tickValues.push(metrics[a]["timestamp"])
+            var datetime = metrics[a]["timestamp"]//.split(" ").join("-17") + ":00"
+            label.push(datetime)
+
+            data.push(metrics[a]["floatValue"].toFixed(1))
+
+        }
+        console.log("tickValues ",tickValues)
+        console.log("label ",label)
+        console.log("data ",data)
+        c3.generate({
+            bindto: '#CPU-line-chart',
+            data: {
+                columns: [
+                    data
+                ]
+            },
+            axis: {
+                x: {
+                    type: "category",
+                    categories: label,
+                    tick: {
+                        culling: {
+                            max: 5
+                        },
+                        multiline: false
+                    }
+                },
+                show: true
+            },
+            grid: {
+                x: {
+                    show: true
+                },
+                y: {
+                    show: true
+                }
+            }
+
+        });
+    }
+
+
+    function NetworkChart() {
+        console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ,NetworkChart")
+        var datasRX = {"cluster":"CID-fab5b135e7b2","containerName":"web1-3771192691-rkjkb","data":[{"containerName":"web1-3771192691-rkjkb","start":"2017-05-29T07:02:14.593Z","type":"network/rx_rate","metrics":[{"timestamp":"05-29 15:02","value":0,"floatValue":0},{"timestamp":"05-29 15:03","value":0,"floatValue":0},{"timestamp":"05-29 15:04","value":0,"floatValue":0},{"timestamp":"05-29 15:05","value":0,"floatValue":0},{"timestamp":"05-29 15:06","value":0,"floatValue":0},{"timestamp":"05-29 15:07","value":0,"floatValue":0},{"timestamp":"05-29 15:08","value":0,"floatValue":0},{"timestamp":"05-29 15:09","value":0,"floatValue":0},{"timestamp":"05-29 15:10","value":0,"floatValue":0},{"timestamp":"05-29 15:11","value":0,"floatValue":0},{"timestamp":"05-29 15:12","value":0,"floatValue":0},{"timestamp":"05-29 15:13","value":0,"floatValue":4},{"timestamp":"05-29 15:14","value":0,"floatValue":0},{"timestamp":"05-29 15:15","value":0,"floatValue":0},{"timestamp":"05-29 15:16","value":0,"floatValue":0},{"timestamp":"05-29 15:17","value":0,"floatValue":0},{"timestamp":"05-29 15:18","value":0,"floatValue":0},{"timestamp":"05-29 15:19","value":0,"floatValue":2},{"timestamp":"05-29 15:20","value":0,"floatValue":0},{"timestamp":"05-29 15:21","value":0,"floatValue":0},{"timestamp":"05-29 15:22","value":0,"floatValue":0},{"timestamp":"05-29 15:23","value":0,"floatValue":0},{"timestamp":"05-29 15:24","value":0,"floatValue":0},{"timestamp":"05-29 15:25","value":0,"floatValue":0},{"timestamp":"05-29 15:26","value":0,"floatValue":0},{"timestamp":"05-29 15:27","value":5,"floatValue":0},{"timestamp":"05-29 15:28","value":0,"floatValue":0},{"timestamp":"05-29 15:29","value":0,"floatValue":3},{"timestamp":"05-29 15:30","value":0,"floatValue":0},{"timestamp":"05-29 15:31","value":0,"floatValue":0},{"timestamp":"05-29 15:32","value":0,"floatValue":0},{"timestamp":"05-29 15:33","value":0,"floatValue":0},{"timestamp":"05-29 15:34","value":0,"floatValue":0},{"timestamp":"05-29 15:35","value":0,"floatValue":0},{"timestamp":"05-29 15:36","value":0,"floatValue":1},{"timestamp":"05-29 15:37","value":0,"floatValue":0},{"timestamp":"05-29 15:38","value":0,"floatValue":0},{"timestamp":"05-29 15:39","value":0,"floatValue":0},{"timestamp":"05-29 15:40","value":0,"floatValue":0},{"timestamp":"05-29 15:41","value":6,"floatValue":0},{"timestamp":"05-29 15:42","value":0,"floatValue":0},{"timestamp":"05-29 15:43","value":0,"floatValue":0},{"timestamp":"05-29 15:44","value":0,"floatValue":0},{"timestamp":"05-29 15:45","value":0,"floatValue":8},{"timestamp":"05-29 15:46","value":0,"floatValue":0},{"timestamp":"05-29 15:47","value":9,"floatValue":0},{"timestamp":"05-29 15:48","value":0,"floatValue":0},{"timestamp":"05-29 15:49","value":0,"floatValue":0},{"timestamp":"05-29 15:50","value":0,"floatValue":0},{"timestamp":"05-29 15:51","value":0,"floatValue":0},{"timestamp":"05-29 15:52","value":0,"floatValue":0},{"timestamp":"05-29 15:53","value":0,"floatValue":0},{"timestamp":"05-29 15:54","value":0,"floatValue":0},{"timestamp":"05-29 15:55","value":0,"floatValue":0},{"timestamp":"05-29 15:56","value":0,"floatValue":0},{"timestamp":"05-29 15:57","value":0,"floatValue":0},{"timestamp":"05-29 15:58","value":0,"floatValue":0},{"timestamp":"05-29 15:59","value":0,"floatValue":0},{"timestamp":"05-29 16:00","value":0,"floatValue":10},{"timestamp":"05-29 16:01","value":0,"floatValue":0},{"timestamp":"05-29 16:02","value":7,"floatValue":0}],"statusCode":200}]}
+        var dataRX = [datasRX.containerName + " RX"]
+        var tickValuesRX = [datasRX.containerName + " RX"]
+        var metricsRX = datasRX["data"][0]["metrics"]
+
+
+        var datasTX = {"cluster":"CID-fab5b135e7b2","containerName":"web1-3771192691-rkjkb","data":[{"containerName":"web1-3771192691-rkjkb","start":"2017-05-29T07:02:14.593Z","type":"network/rx_rate","metrics":[{"timestamp":"05-29 15:02","value":0,"floatValue":0},{"timestamp":"05-29 15:03","value":0,"floatValue":0},{"timestamp":"05-29 15:04","value":0,"floatValue":0},{"timestamp":"05-29 15:05","value":0,"floatValue":0},{"timestamp":"05-29 15:06","value":0,"floatValue":0},{"timestamp":"05-29 15:07","value":0,"floatValue":0},{"timestamp":"05-29 15:08","value":0,"floatValue":0},{"timestamp":"05-29 15:09","value":0,"floatValue":0},{"timestamp":"05-29 15:10","value":0,"floatValue":0},{"timestamp":"05-29 15:11","value":0,"floatValue":0},{"timestamp":"05-29 15:12","value":0,"floatValue":0},{"timestamp":"05-29 15:13","value":0,"floatValue":0},{"timestamp":"05-29 15:14","value":0,"floatValue":6},{"timestamp":"05-29 15:15","value":0,"floatValue":0},{"timestamp":"05-29 15:16","value":0,"floatValue":0},{"timestamp":"05-29 15:17","value":0,"floatValue":0},{"timestamp":"05-29 15:18","value":0,"floatValue":4},{"timestamp":"05-29 15:19","value":0,"floatValue":0},{"timestamp":"05-29 15:20","value":0,"floatValue":0},{"timestamp":"05-29 15:21","value":0,"floatValue":10},{"timestamp":"05-29 15:22","value":0,"floatValue":0},{"timestamp":"05-29 15:23","value":0,"floatValue":0},{"timestamp":"05-29 15:24","value":0,"floatValue":8},{"timestamp":"05-29 15:25","value":0,"floatValue":7},{"timestamp":"05-29 15:26","value":0,"floatValue":0},{"timestamp":"05-29 15:27","value":0,"floatValue":0},{"timestamp":"05-29 15:28","value":0,"floatValue":0},{"timestamp":"05-29 15:29","value":0,"floatValue":0},{"timestamp":"05-29 15:30","value":0,"floatValue":0},{"timestamp":"05-29 15:31","value":0,"floatValue":0},{"timestamp":"05-29 15:32","value":0,"floatValue":0},{"timestamp":"05-29 15:33","value":0,"floatValue":0},{"timestamp":"05-29 15:34","value":0,"floatValue":0},{"timestamp":"05-29 15:35","value":0,"floatValue":0},{"timestamp":"05-29 15:36","value":0,"floatValue":0},{"timestamp":"05-29 15:37","value":0,"floatValue":0},{"timestamp":"05-29 15:38","value":0,"floatValue":1},{"timestamp":"05-29 15:39","value":0,"floatValue":0},{"timestamp":"05-29 15:40","value":0,"floatValue":0},{"timestamp":"05-29 15:41","value":0,"floatValue":0},{"timestamp":"05-29 15:42","value":0,"floatValue":0},{"timestamp":"05-29 15:43","value":0,"floatValue":0},{"timestamp":"05-29 15:44","value":0,"floatValue":0},{"timestamp":"05-29 15:45","value":0,"floatValue":0},{"timestamp":"05-29 15:46","value":0,"floatValue":2},{"timestamp":"05-29 15:47","value":0,"floatValue":0},{"timestamp":"05-29 15:48","value":0,"floatValue":0},{"timestamp":"05-29 15:49","value":0,"floatValue":0},{"timestamp":"05-29 15:50","value":0,"floatValue":0},{"timestamp":"05-29 15:51","value":0,"floatValue":0},{"timestamp":"05-29 15:52","value":0,"floatValue":0},{"timestamp":"05-29 15:53","value":0,"floatValue":0},{"timestamp":"05-29 15:54","value":0,"floatValue":5},{"timestamp":"05-29 15:55","value":0,"floatValue":0},{"timestamp":"05-29 15:56","value":9,"floatValue":0},{"timestamp":"05-29 15:57","value":0,"floatValue":0},{"timestamp":"05-29 15:58","value":0,"floatValue":0},{"timestamp":"05-29 15:59","value":0,"floatValue":0},{"timestamp":"05-29 16:00","value":0,"floatValue":0},{"timestamp":"05-29 16:01","value":0,"floatValue":3},{"timestamp":"05-29 16:02","value":0,"floatValue":0}],"statusCode":200}]}
+        var dataTX = [datasTX.containerName + " TX"]
+//        var tickValuesTX = [datasTX.containerName]
+
+        var metricsTX = datasTX["data"][0]["metrics"]
+
+        var label = []
+        for(var a=0; a<metricsRX.length; a++){
+            tickValuesRX.push(metricsRX[a]["timestamp"])
+            var datetime = metricsRX[a]["timestamp"]//.split(" ").join("-17") + ":00"
+            label.push(datetime)
+
+            dataRX.push(metricsRX[a]["floatValue"].toFixed(1))
+            dataTX.push(metricsTX[a]["floatValue"].toFixed(1))
+
+        }
+        console.log("tickValues ",tickValuesRX)
+        console.log("label ",label)
+        console.log("data ",dataRX)
+        c3.generate({
+            bindto: '#NETWORK-line-chart',
+            data: {
+                columns: [
+                    dataRX,
+                    dataTX
+                ]
+            },
+            axis: {
+                x: {
+                    type: "category",
+                    categories: label,
+                    tick: {
+                        culling: {
+                            max: 5
+                        },
+                        multiline: false
+                    }
+                },
+                show: true
+
+            },
+            legend: {
+                position: "top"
+            },
+            grid: {
+                x: {
+                    show: true
+                },
+                y: {
+                    show: true
+                }
+            }
+
+        });
+    }
+
+    function MemoryChart() {
+        console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ,MemoryChart")
+        var datas = {"cluster":"CID-fab5b135e7b2","containerName":"web1-3771192691-rkjkb","data":[{"containerName":"web1-3771192691-rkjkb","start":"2017-05-29T06:33:47.759Z","type":"memory/usage","metrics":[{"timestamp":"05-29 14:33","value":180944896,"floatValue":180944896},{"timestamp":"05-29 14:34","value":180944896,"floatValue":180944896},{"timestamp":"05-29 14:35","value":180944896,"floatValue":180944896},{"timestamp":"05-29 14:36","value":180944896,"floatValue":180944896},{"timestamp":"05-29 14:37","value":180944896,"floatValue":180944896},{"timestamp":"05-29 14:38","value":180944896,"floatValue":180944896},{"timestamp":"05-29 14:39","value":180944896,"floatValue":180944896},{"timestamp":"05-29 14:40","value":180944896,"floatValue":180944896},{"timestamp":"05-29 14:41","value":180944896,"floatValue":180944896},{"timestamp":"05-29 14:42","value":180944896,"floatValue":180944896},{"timestamp":"05-29 14:43","value":180944896,"floatValue":180944896},{"timestamp":"05-29 14:44","value":180944896,"floatValue":180944896},{"timestamp":"05-29 14:45","value":180944896,"floatValue":180944896},{"timestamp":"05-29 14:46","value":180944896,"floatValue":180944896},{"timestamp":"05-29 14:47","value":180944896,"floatValue":180944896},{"timestamp":"05-29 14:48","value":180944896,"floatValue":180944896},{"timestamp":"05-29 14:49","value":180944896,"floatValue":180944896},{"timestamp":"05-29 14:50","value":180944896,"floatValue":180944896},{"timestamp":"05-29 14:51","value":180944896,"floatValue":180944896},{"timestamp":"05-29 14:52","value":180944896,"floatValue":180944896},{"timestamp":"05-29 14:53","value":180944896,"floatValue":180944896},{"timestamp":"05-29 14:54","value":180944896,"floatValue":180944896},{"timestamp":"05-29 14:55","value":180944896,"floatValue":180944896},{"timestamp":"05-29 14:56","value":180944896,"floatValue":180944896},{"timestamp":"05-29 14:57","value":180944896,"floatValue":180944896},{"timestamp":"05-29 14:58","value":180944896,"floatValue":180944896},{"timestamp":"05-29 14:59","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:00","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:01","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:02","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:03","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:04","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:05","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:06","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:07","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:08","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:09","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:10","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:11","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:12","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:13","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:14","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:15","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:16","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:17","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:18","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:19","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:20","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:21","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:22","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:23","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:24","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:25","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:26","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:27","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:28","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:29","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:30","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:31","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:32","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:33","value":180944896,"floatValue":180944896}],"statusCode":200}]}
+        var data = [datas.containerName]
+        var tickValues = [datas.containerName]
+
+        var metrics = datas["data"][0]["metrics"]
+
+        var label = []
+        for(var a=0; a<metrics.length; a++){
+            tickValues.push(metrics[a]["timestamp"])
+            var datetime = metrics[a]["timestamp"]//.split(" ").join("-17") + ":00"
+            label.push(datetime)
+
+            data.push((parseInt(metrics[a]["floatValue"])/1000000).toString())
+
+        }
+        console.log("tickValues ",tickValues)
+        console.log("label ",label)
+        console.log("data ",data)
+        c3.generate({
+            bindto: '#MEMORY-line-chart',
+            data: {
+                columns: [
+                    data
+                ]
+            },
+            axis: {
+                x: {
+                    type: "category",
+                    categories: label,
+                    tick: {
+                        culling: {
+                            max: 5
+                        },
+                        multiline: false
+                    }
+                },
+                y: {
+                    tick: {
+                        format: function (d) {
+                            return d + " M"
+                        }
+                    }
+                },
+                show: true
+            },
+            grid: {
+                x: {
+                    show: true
+                },
+                y: {
+                    show: true
+                }
+            }
+
+        });
+    }
+</script>
+</html>

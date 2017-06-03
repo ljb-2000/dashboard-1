@@ -1,0 +1,79 @@
+/*from core.js*/
+
+/* Labels */
+.label {
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    padding: .3em .6em .3em;
+}
+.label-default {
+    background-color: #5fbeaa;
+}
+.label-primary {
+    background-color: #5d9cec;
+}
+.label-success {
+    background-color: #81c868;
+}
+.label-info {
+    background-color: #34d3eb;
+}
+.label-warning {
+    background-color: #ffbd4a;
+}
+.label-danger {
+    background-color: #f05050;
+}
+.label-purple {
+    background-color: #7266ba;
+}
+.label-pink {
+    background-color: #fb6d9d;
+}
+.label-inverse {
+    background-color: #4c5667;
+}
+/* Badge */
+.badge {
+    text-transform: uppercase;
+    font-weight: 600;
+    padding: 3px 5px;
+    font-size: 12px;
+    margin-top: 1px;
+    background-color: #5fbeaa;
+}
+.badge-xs {
+    font-size: 9px;
+}
+.badge-xs,
+.badge-sm {
+    -webkit-transform: translate(0, -2px);
+    -ms-transform: translate(0, -2px);
+    -o-transform: translate(0, -2px);
+    transform: translate(0, -2px);
+}
+.badge-primary {
+    background-color: #5d9cec;
+}
+.badge-success {
+    background-color: #81c868;
+}
+.badge-info {
+    background-color: #34d3eb;
+}
+.badge-warning {
+    background-color: #ffbd4a;
+}
+.badge-danger {
+    background-color: #f05050;
+}
+.badge-purple {
+    background-color: #7266ba;
+}
+.badge-pink {
+    background-color: #fb6d9d;
+}
+.badge-inverse {
+    background-color: #4c5667;
+}
+

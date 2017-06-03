@@ -1,0 +1,49 @@
+<div id="scaleApp" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModelLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h3 id="myModalLabel">弹性伸缩</h3>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="box-body">
+                        <!--<label class="col-sm-3 control-label" for="instanceCount">容器个数:</label>-->
+                        <!--<div class="col-sm-6">-->
+                            <!--<input type="text" class="form-control" id="instanceCount" palceholder="" />-->
+                        <!--</div>-->
+                        <div class="form-group">
+                            <label for="instanceCountAdd" class="col-sm-3 control-label" style="margin-top: 15px">容器个数:</label>
+                            <div class="col-sm-6 irs-blue" id="instanceCountAdddiv">
+                                <input type="text" id="instanceCountAdd" name="instanceCountAdd">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer" style="text-align: center">
+                <button type="button" class="ant-btn ant-btn-ghost ant-btn-lg cancelBtn" data-dismiss="modal" style="width: 100px" ><span>取 消</span></button>
+                <button type="submit" class="ant-btn ant-btn-primary ant-btn-lg createBtn" id="scale" style="width: 100px"><span>确 定</span></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{{ define "js" }}
+    <!--<script src="../static/js/modernizr.min.js"></script>-->
+    <script type="text/javascript" src="../static/plugins/ion-rangeslider/ion.rangeSlider.min.js"></script>
+    <script type="text/javascript" src="../static/plugins/seiyria-bootstrap-slider/dist/bootstrap-slider.min.js"></script>
+    <!--<script type="text/javascript" src="../static/pages/jquery.ui-sliders.js"></script>-->
+
+{{ end }}
+
+{{ define "css"}}
+    <link href="../static/plugins/custombox/dist/custombox.min.css" rel="stylesheet">
+    <!-- ION Slider -->
+    <link href="../static/plugins/ion-rangeslider/ion.rangeSlider.css" rel="stylesheet" type="text/css"/>
+    <link href="../static/plugins/ion-rangeslider/ion.rangeSlider.skinFlat.css" rel="stylesheet" type="text/css"/>
+    <link href="../static/plugins/seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css" rel="stylesheet" type="text/css"/>
+{{ end }}

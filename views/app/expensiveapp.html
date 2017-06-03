@@ -1,0 +1,177 @@
+<style>
+    #expensiveAppUnit .infoBox .operaBox .composeDetail .ant-btn-ghost .topBox {
+        height: 25px;
+        line-height: 25px;
+        font-size: 16px;
+        background-color: #d9d9d9;
+        border-top-left-radius: 4px;
+        border-top-right-radius: 4px
+    }
+    #expensiveAppUnit .infoBox .operaBox .composeDetail .ant-btn-ghost .bottomBox {
+        width: 100%;
+        height: 70px;
+        padding: 15px 10px;
+        text-align: center;
+        background-color: #fff;
+        border-bottom-left-radius: 6px;
+        border-bottom-right-radius: 6px;
+    }
+    #expensiveAppUnit .infoBox .operaBox .composeDetail .ant-btn-ghost .anticon-check,
+    #expensiveAppUnit .infoBox .operaBox .composeDetail .ant-btn-ghost .triangle {
+        display: none;
+    }
+    #expensiveAppUnit .infoBox .operaBox .composeDetail {
+        margin-top: 10px;
+        margin-right: 20px;
+        float: left;
+    }
+    #expensiveAppUnit .infoBox .operaBox .composeDetail .ant-btn-ghost {
+        width: 100px;
+        padding: 0;
+    }
+    #expensiveAppUnit .infoBox .operaBox .composeDetail .ant-btn-primary .topBox {
+        height: 25px;
+        line-height: 25px;
+        font-size: 16px;
+    }
+    #expensiveAppUnit .infoBox .operaBox .composeDetail .ant-btn-primary .bottomBox {
+        width: 100%;
+        height: 70px;
+        padding: 15px 10px;
+        text-align: center;
+        background-color: #fff;
+        color: #2db7f5;
+        border-bottom-left-radius: 6px;
+        border-bottom-right-radius: 6px;
+    }
+    #expensiveAppUnit .infoBox .operaBox .composeDetail .ant-btn-primary .triangle {
+        display: block;
+        width: 0;
+        height: 0;
+        border-bottom: 0 solid transparent;
+        border-top: 20px solid transparent;
+        border-right: 22px solid #2db7f5;
+        font-size: 0;
+        line-height: 0;
+        position: absolute;
+        bottom: 0;
+        right: 0;
+    }
+    #expensiveAppUnit .infoBox .operaBox .composeDetail .ant-btn-primary .anticon-check {
+        display: inline-block;
+        font-size: 8px;
+        position: absolute;
+        right: 0;
+        bottom: -1px;
+        z-index: 2;
+        color: #fff;
+    }
+    #expensiveAppUnit .infoBox .operaBox .composeDetail .ant-btn-primary {
+        width: 100px;
+        padding: 0;
+        position: relative;
+        overflow: hidden;
+    }
+    #expensiveAppUnit .infoBox .operaBox .composeDetail .ant-btn-primary .topBox {
+        height: 25px;
+        line-height: 25px;
+        font-size: 16px;
+    }
+</style>
+<div id="expensiveApp" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModelLabel">
+    <div class="modal-dialog" role="document" >
+        <div class="modal-content" style="width: 550px">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h3 id="myModalLabel">弹性伸缩</h3>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" id="resForm">
+                    <div class="box-body" id="expensiveAppUnit">
+                        <!--<div class="form-group">-->
+                        <!--<label class="col-sm-3 control-label" for="cp">cpu:</label>-->
+                        <!--<div class="col-sm-6">-->
+                        <!--<input type="text" class="form-control" id="cp" palceholder="" />-->
+                        <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="form-group">-->
+                        <!--<label class="col-sm-3 control-label" for="mem">内存:</label>-->
+                        <!--<div class="col-sm-6">-->
+                        <!--<input type="text" class="form-control" id="mem" palceholder="" />-->
+                        <!--</div>-->
+                        <!--</div>-->
+                        <div class="infoBox">
+                            <div class="operaBox">
+                                <div class="selectCompose" style="margin-left: 20px">
+                                    <ul class="composeList">
+                                        <li class="composeDetail">
+                                            <button type="button" class="ant-btn ant-btn-primary" cpu="512m" memory="1024Mi">
+                                                <div class="topBox">4X</div>
+                                                <div class="bottomBox">
+                                                    <span>1024Mi&nbsp;内存</span><br>
+                                                    <span>512m CPU&nbsp;</span>
+                                                    <div class="triangle"></div>
+                                                    <i class="anticon anticon-check"></i>
+                                                </div>
+                                            </button>
+                                        </li>
+                                        <li class="composeDetail">
+                                            <button type="button" class="ant-btn ant-btn-ghost"  cpu="1024m" memory="2048Mi">
+                                                <div class="topBox">8X</div>
+                                                <div class="bottomBox">
+                                                    <span>2048i&nbsp;内存</span><br>
+                                                    <span>1024m CPU&nbsp;</span>
+                                                    <div class="triangle"></div>
+                                                    <i class="anticon anticon-check"></i>
+                                                </div>
+                                            </button>
+                                        </li>
+                                        <li class="composeDetail">
+                                            <button type="button" class="ant-btn ant-btn-ghost" cpu="2048m" memory="4096Mi">
+                                                <div class="topBox">16X</div>
+                                                <div class="bottomBox">
+                                                    <span>4096Mi&nbsp;内存</span><br>
+                                                    <span>2048m CPU</span>
+                                                    <div class="triangle"></div>
+                                                    <i class="anticon anticon-check"></i>
+                                                </div>
+                                            </button>
+                                        </li>
+                                        <li class="composeDetail">
+                                            <button type="button" class="ant-btn ant-btn-ghost" cpu="4096m" memory="8192Mi">
+                                                <div class="topBox">32X</div>
+                                                <div class="bottomBox">
+                                                    <span>8192Mi&nbsp;内存</span><br>
+                                                    <span>4096m CPU</span>
+                                                    <div class="triangle"></div>
+                                                    <i class="anticon anticon-check"></i>
+                                                </div>
+                                            </button>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer" style="text-align: center">
+                <button type="button" class="ant-btn ant-btn-ghost ant-btn-lg cancelBtn" data-dismiss="modal" style="width: 100px" ><span>取 消</span></button>
+                <button type="submit" class="ant-btn ant-btn-primary ant-btn-lg createBtn" id="expensive" style="width: 100px"><span>确 定</span></button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(".composeList .composeDetail button").each(function () {
+        $(this).on("click",function () {
+            $(".composeDetail button").removeClass("ant-btn-primary")
+            $(".composeDetail button").removeClass("ant-btn-ghost")
+            $(".composeDetail button").addClass("ant-btn-ghost")
+            $(this).removeClass("ant-btn-ghost")
+            $(this).addClass("ant-btn-primary")
+        })
+    })
+</script>

@@ -1,0 +1,755 @@
+<style>
+    /*#myTabContent .fixed-table-toolbar {*/
+        /*margin-top: -42px;*/
+    /*}*/
+    #myTabContent .bootstrap-table .columns.columns-right.btn-group.pull-right button {
+        background-color: #2db7f5 !important;
+        border: 1px solid #2db7f5 !important;
+        margin-right: 32px !important;
+    }
+</style>
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>镜像中心<small></small></h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i>容器服务</a></li>
+            <li><a href="#">容器&服务</a></li>
+        </ol>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box">
+                    <div class="box-header" id="tool-bar">
+                        <button href="#" class="btn btn-success waves-effect waves-light">
+                            <i class="fa fa-upload"></i> Upload
+                        </button>
+                        <div class="box-tools" style="top: 12px">
+                            <div class="input-group input-group-sm" style="width: 150px;">
+                                <input type="text" name="table_search" class="form-control pull-right" placeholder="Search">
+                                <div class="input-group-btn">
+                                    <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class=" ">
+                        <div id=" ">
+                            <form class="form-horizontal" id="resForm">
+                                <div class="box-body">
+                                    <ul id="myTab" class="nav nav-tabs">
+                                        <li class="active">
+                                            <a href="#dockerhub" data-toggle="tab">我的镜像</a>
+                                        </li>
+                                        <li><a href="#minihub" data-toggle="tab">镜像广场</a></li>
+                                    </ul>
+                                    <div id="myTabContent" class="tab-content">
+                                        <div class="tab-pane fade in active serverType" id="dockerhub">
+                                            <div class="serverKey">
+                                                <span class="btns primary">全部</span>
+                                                <span class="btns">运行环境</span>
+                                                <span class="btns">Web服务器</span>
+                                                <span class="btns">数据库与缓存</span>
+                                                <span class="btns">操作系统</span>
+                                                <span class="btns">中间件与其他</span>
+                                            </div>
+                                            <!--<p>docker官方镜像仓库中心</p>-->
+                                            <div class="dataBox" style="height: auto !important;">
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade serverType" id="minihub">
+                                            <!--<p>mini平台镜像市场</p>-->
+                                            <div class="dataBox" style="height: auto !important;" >
+                                                <div class="serviceDetail" imgs="10.140.53.44:5000/alpine-nginx" tag="v0.0.2,v0.0.1">
+                                                    <div class="infoBox">
+                                                        <span class="name">10.140.53.44:5000/alpine-nginx</span><br>
+                                                    </div>
+                                                    <button type="button" class="ant-btn ant-btn-primary ant-btn-lg">
+                                                        <span>Operation</span>
+                                                    </button>
+                                                </div>
+                                                <div class="serviceDetail" imgs="10.140.53.44:5000/centos-tomcat" tag="v0.0.1">
+                                                    <div class="infoBox">
+                                                        <span class="name">10.140.53.44:5000/centos-tomcat</span><br>
+                                                    </div>
+                                                    <button type="button" class="ant-btn ant-btn-primary ant-btn-lg">
+                                                        <span>Operation</span>
+                                                    </button>
+                                                </div>
+                                                <div class="serviceDetail" imgs="10.140.53.44:5000/gc-tomcat" tag="v0.0.1">
+                                                    <div class="infoBox">
+                                                        <span class="name">10.140.53.44:5000/gc-tomcat</span><br>
+                                                    </div>
+                                                    <button type="button" class="ant-btn ant-btn-primary ant-btn-lg">
+                                                        <span>Operation</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                    <!--  <div class="box-footer clearfix">
+                        <ul class="pagination pagination-sm no-margin pull-right">
+                            <li><a href="#">&laquo;</a></li>
+                            <li><a href="#">1</a></li>
+                            <li><a href="#">2</a></li>
+                            <li><a href="#">3</a></li>
+                            <li><a href="#">&raquo;</a></li>
+                        </ul>
+                    </div> -->
+                </div>
+            </div>
+            <!-- /.col -->
+        </div>
+    </section>
+    <!-- /.content -->
+</div>
+<script>
+    function addNewImageMMM(image,tags,tag) {
+        $('#addImage').modal('hide');
+        $('#addapp').modal('show');
+        console.log(image,tag,tags)
+        if(!$("#myTab li:first").hasClass("active")){
+            $("#myTab li").removeClass("active")
+            $("#myTab li:first").addClass("active")
+            $(".tab-pane.fade.serverType").removeClass("active in")
+            $("#dockerhub").addClass("active in")
+        }
+
+
+        $(".enviroList ul").empty()
+        $(".portList ul").empty()
+        $(".ant-input.ant-input-lg.imageInput").val(image)
+        tags = tags.split(",")
+        var version = "<option value='latest'>latest</option>"
+        for(var a=0; a<tags.length; a++){
+            var sel = ""
+            if(tag == tags[a]){
+                sel = "selected"
+            }
+            version += "<option value='"+ tags[a] +"' "+ sel +">"+ tags[a] +"</option>"
+        }
+
+        $("#version").html(version)
+        addPortMapping()
+        addEnvironmentVariable()
+        if($(".ant-collapse-content").hasClass("ant-collapse-content-active")){
+            $(".ant-collapse-content").removeClass("ant-collapse-content-active")
+            $(".ant-collapse-content").addClass("ant-collapse-content-inactive")
+            $(".ant-collapse-item").removeClass("ant-collapse-item-active")
+            $(".ant-collapse-item").addClass("ant-collapse-item-inactive")
+        }
+    }
+
+    function addEnvironmentVariable() {
+        var row = '<div class="ant-row ant-form-item"><div class=""><div class="ant-form-item-control ">' +
+            '<li class="enviroDetail"><div class="input"><div class="ant-row ant-form-item"><div class="">' +
+            '<div class="ant-form-item-control "><span class="ant-input-wrapper">' +
+            '<input type="text" id="envName8" value="" data-__meta="[object Object]" class="ant-input ant-input-lg composeUrl">' +
+            '</span></div></div></div></div><div class="input"><span class="ant-input-wrapper">' +
+            '<input type="text" id="envValue8" value="" data-__meta="[object Object]" class="ant-input ant-input-lg composeUrl">' +
+            '</span></div><div class="opera"><i class="fa fa-trash-o"></i></div><div style="clear: both;">' +
+            '</div></li></div></div></div>'
+        $(".enviroList ul").append(row)
+        $(".enviroBox .fa.fa-trash-o").on("click",function () {
+            $(this).parent().parent().parent().parent().parent().remove()
+        })
+    }
+
+
+    function addPortMapping() {
+        var row = '<div><li class="portDetail"><div class="input"><div class="ant-row ant-form-item"><div class="">' +
+            '<div class="ant-form-item-control "><span class="ant-input-wrapper"><input type="text" id="targetPortUrl4" ' +
+            'value="" data-__meta="[object Object]" class="ant-input ant-input-lg composeUrl"></span>' +
+            '</div></div></div></div><div class="protocol select"><div class="ant-row ant-form-item portGroupForm">' +
+            '<div class=""><div class="ant-form-item-control has-success"><div class="ant-select-lg portGroup ' +
+            'ant-select-show-search ant-select ant-select-enabled"><select class="form-control">' +
+            '<option value="HTTP">HTTP</option><option value="TCP" selected>TCP</option></select></div></div>' +
+            '</div></div></div><div class="mapping"><div class="podPort"><div class="tcpDiv">' +
+            '<div class="ant-select-lg tcpSelect ant-select ant-select-enabled"><select class="form-control" ' +
+            'style="width: auto"><option value="动态生成" selected>动态生成</option><option value="指定端口">指定端口</option>' +
+            '</select></div></div><div class="ant-row ant-form-item tcpInputForm tcpInputForm3" style="display: none">' +
+            '<div class=""><div class="ant-form-item-control "><span class="ant-input-wrapper">' +
+            '<input type="text" id="portUrl3" value="" data-__meta="[object Object]" class="ant-input ant-input-lg" ' +
+            'style="width: 100px;"></span></div></div></div></div></div><div class="opera"><i class="fa fa-trash-o">' +
+            '</i></div><div style="clear: both;"></div></li></div>'
+        $(".portList ul").append(row)
+        $(".portDetail .fa.fa-trash-o").on("click",function () {
+            $(this).parent().parent().remove()
+        })
+        $(".ant-select-lg.tcpSelect.ant-select.ant-select-enabled select").on("change",function () {
+            if($(this).val() == "指定端口"){
+                $(this).parent().parent().parent().find(".ant-row.ant-form-item").show()
+            }else{
+                $(this).parent().parent().parent().find(".ant-row.ant-form-item").hide()
+            }
+        })
+    }
+
+    function createApp() {
+        var appName = $('#name').val()
+        var image = $('.ant-input.ant-input-lg.imageInput').val() + ":" + $('#version').val()
+        var cpu = $("#NormalDeployBox .composeDetail .ant-btn.ant-btn-primary").attr("cpu")
+        var memory = $("#NormalDeployBox .composeDetail .ant-btn.ant-btn-primary").attr("memory")
+        var instanceCnt = $('#instanceNum').val()
+
+        var valid = true
+        $(".topBox input").each(function () {
+            if($(this).val() == ""){
+                $(this).on("keyup",function () {
+                    $(this).parent().parent().removeClass("has-error")
+                })
+                if(!$(this).parent().parent().hasClass("has-error")){
+                    $(this).parent().parent().addClass("has-error")
+                }
+                valid = false
+                return false
+            }
+        })
+        if(!valid){
+            $.Notification.autoHideNotify('warning', 'top right', 'Fillup empty fields','<br>')
+            return
+        }
+        console.log(JSON.stringify({
+            "name": appName,
+            "region": "north",
+            "memory": memory,
+            "cpu": cpu,
+            "instanceCount": Number(instanceCnt),
+            "image": image,
+            "userName": "oliver",
+            "remark": "this is a test web application"
+        }))
+        $.ajax({
+            type: 'POST',
+            url: "http://10.5.9.47:9090/api/v1/apps",
+            dataType: 'JSON',
+            contentType: "application/json",
+            data: JSON.stringify({
+                "name": appName,
+                "region": "north",
+                "memory": memory,
+                "cpu": cpu,
+                "instanceCount": Number(instanceCnt),
+                "image": image,
+                "userName": "oliver",
+                "remark": "this is a test web application"
+            }),
+            success: function(data, status) {
+                //            alert(data.msg)
+                $('#addapp').modal('hide');
+                $.Notification.autoHideNotify('success', 'top right', 'Create success','<br>')
+            },
+            error: function(XHR, status, errorThrown) {
+                console.log(XHR);
+                console.log(status);
+                console.log(errorThrown);
+                $.Notification.autoHideNotify('error', 'top right', 'Create error','<br>')
+            }
+        });
+
+    }
+
+    function imageListPopup(ths) {
+        $('#addImage').modal('show');
+
+        var image = $(ths).parent().attr("imgs")
+
+        $.ajax({
+            type: 'GET',
+            url: "http://10.5.9.47:9092/api/v1/images?name="+image+"&pageNum=0&pageCnt=10",
+            dataType: 'JSON',
+            contentType: "application/json",
+            success: function(data, status) {
+                var tag = $(ths).parent().attr("tag")
+
+                var verTag = "<option value='latest' selected>latest</option>"
+                var str = "<tbody>"
+                if(tag){
+                    var tags = tag.split(",")
+                    for(var a=0; a<tags.length; a++){
+                        console.log("tags   ",tags)
+                        str += "<tr><td>"+ image +":"+ tags[a] +"</td>" +
+                            "<td><div class='label label-table label-danger' >删除</div></td>" +
+                            "<td><div class='label label-table label-success' " +
+                            "onclick=\"addNewImageMMM('"+ image +"','"+ tag +"','"+ tags[a] +"')\" image='"+image+"' " +
+                            "tag='"+tag+"' >部署</div></td></tr>"
+
+                    }
+
+                }
+                str += "</tbody>"
+                $("#imageTagList-table").html(str)
+
+            },
+            error: function(XHR, status, errorThrown) {
+                console.log(XHR);
+                console.log(status);
+                console.log(errorThrown);
+//                return
+//                var aadata = {
+//                    "total": 23,
+//                    "data":[
+//                        {
+//                            "name": "alpine-nginx",
+//                            "tag": "v0.0.3",
+//                        },
+//                        {
+//                            "name": "alpine-nginx",
+//                            "tag": "v0.0.2",
+//                        },
+//                        {
+//                            "name": "alpine-nginx",
+//                            "tag": "v0.0.1",
+//                        }
+//                    ]
+//
+//                }
+//
+//                $("#imageTagList-table").bootstrapTable({
+//                    striped: false,
+//                    cache: false,
+//                    pagination: true,
+//                    pageNumber: 1,
+//                    pageSize: 10,
+//                    pageList: [10, 20, 50, 100, 150],
+//                    columns:[{
+//                        field: "name",
+//                        title: "name_name"
+//
+//                    },{
+//                        field: "tag",
+//                        title: "name_tag"
+//                    }],
+//                    data:aadata.data
+//
+//                })
+
+
+                var tag = $(ths).parent().attr("tag")
+
+                var verTag = "<option value='latest' selected>latest</option>"
+                var str = "<tbody>"
+                if(tag){
+                    var tags = tag.split(",")
+                    for(var a=0; a<tags.length; a++){
+                        console.log("tags   ",tags)
+                        str += "<tr><td>"+ image +":"+ tags[a] +"</td>" +
+                            "<td><div class='label label-table label-danger' >删除</div></td>" +
+                            "<td><div class='label label-table label-success' " +
+                            "onclick=\"addNewImageMMM('"+ image +"','"+ tag +"','"+ tags[a] +"')\" image='"+image+"' " +
+                            "tag='"+tag+"' >部署</div></td></tr>"
+                    }
+
+                }
+
+                console.log(str)
+                $("#imageTagList-table").html(str+"</tbody>")
+            }
+        });
+
+        $('#addapp > div > div .modal-body').css({
+            'max-height':$(window).height()*0.75,
+            'overflow': 'auto'
+        })
+    }
+    $(document).ready(function () {
+        $("#dockerhub .dataBox .bootstrap-table").remove()
+        $("#dockerhub .dataBox .clearfix").remove()
+        $.ajax({
+            type: 'GET',
+            url: "http://10.5.9.47:9092/api/v1/images",
+            dataType: 'JSON',
+            contentType: "application/json",
+            success: function(data, status) {
+                console.log(data.data)
+                var str = "<table id='serviceDetail-table' style='width: 100%' data-toggle='table' " +
+                    "data-show-columns='false' data-page-list='[5, 10, 20]' " +
+                    "data-page-size='5' data-pagination='true' " +
+                    "data-show-pagination-switch='true' ><thead style='display: none' ><tr><th colspan='2' " +
+                    "data-field='data'>data</th> <tr></thead><tbody>"
+                for(var a=0; a<data["data"]["images"].length; a++){
+                    var images = data["data"]["images"][a]
+                    var tags = []
+                    for(var b=0; b<images["manifest"].length; b++){
+                        tags.push(images["manifest"][b]["tag"])
+                    }
+                    var tag = images["manifest"][0]["tag"]
+                    var imgs = images["manifest"][0]["pull"].split("//")[1].replace(":"+tag,"")
+                    str += "<tr><td colspan='2'><div class='serviceDetail' imgs='"+ imgs +"' tag='"+ tags.join(",") +"'>" +
+                        "<div class='infoBox'>" +
+                        "   <span class='name'>"+ imgs + "</span><!-- react-text: 51 --> <!-- /react-text --><br>" +
+                        "</div>" +
+                        "<button type='button' class='ant-btn ant-btn-primary ant-btn-lg'>" +
+                        "   <span>Operation</span>" +
+                        "</button></div></td></tr>"
+
+                }
+                $("#dockerhub .dataBox").html(str + "</tbody></table>")
+                $("#serviceDetail-table").bootstrapTable({
+                    onAll: function () {
+                        $(".serviceDetail button").click(function() {
+                            imageListPopup(this)
+                        });
+                        $(".pull-right.pagination").css("margin-left","30px").removeClass("pull-right")
+                        $("#myTabContent .pull-left.pagination-detail button").removeClass("btn-default").addClass("btn-xs btn-info")
+                        $("#myTabContent .tab-pane.fade.in.active.serverType .dataBox").css({
+                            "margin-top": "-39px"
+                        })
+                        $("#dockerhub").find("div").eq(0).css({
+                            "margin-left": "10px"
+                        })
+
+                    }
+                })
+                $("#serviceDetail-table > thead").hide()
+                //    $("#create-step").click(function() {
+                $(".serviceDetail button").click(function() {
+                    imageListPopup(this)
+                });
+
+
+            },
+            error: function(XHR, status, errorThrown) {
+                console.log(XHR);
+                console.log(status);
+                console.log(errorThrown);
+
+                var data = {
+                    "apiversion": "v1",
+                    "status": "200",
+                    "data": {
+                        "images": [
+                            {
+                                "name": "alpine-nginx",
+                                "tagLen": 2,
+                                "manifest": [
+                                    {
+                                        "name": "alpine-nginx",
+                                        "tag": "v0.0.2",
+                                        "architecture": "amd64",
+                                        "os": "linux",
+                                        "author": "oliver",
+                                        "id": "f999fdedf120a36b1c6d5302d7846c5efee0e53238801c2693e8d230cabf432a",
+                                        "parent": "6a8802d8edfb06220416524ca06b42b586186368718105e6a85e37127dd0b320",
+                                        "created": "2017-05-17T07:46:39.22561393Z",
+                                        "docker_version": "1.12.6",
+                                        "pull": "docker pull http://10.140.53.44:5000/alpine-nginx:v0.0.2"
+                                    },
+                                    {
+                                        "name": "alpine-nginx",
+                                        "tag": "v0.0.1",
+                                        "architecture": "amd64",
+                                        "os": "linux",
+                                        "author": "oliver",
+                                        "id": "f999fdedf120a36b1c6d5302d7846c5efee0e53238801c2693e8d230cabf432a",
+                                        "parent": "6a8802d8edfb06220416524ca06b42b586186368718105e6a85e37127dd0b320",
+                                        "created": "2017-05-17T07:46:39.22561393Z",
+                                        "docker_version": "1.12.6",
+                                        "pull": "docker pull http://10.140.53.44:5000/alpine-nginx:v0.0.1"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "centos-tomcat",
+                                "tagLen": 1,
+                                "manifest": [
+                                    {
+                                        "name": "centos-tomcat",
+                                        "tag": "v0.0.1",
+                                        "architecture": "amd64",
+                                        "os": "linux",
+                                        "author": "Oliver",
+                                        "id": "7c39eba802476f54eca49714ae34b046d60162c5421a97c1992c31ee6cd565d2",
+                                        "parent": "75368a89a98775e10cdd327d39744f54ef602fe88f581533a9e89a343f497aaa",
+                                        "created": "2017-05-16T07:58:22.110268373Z",
+                                        "docker_version": "1.12.6",
+                                        "pull": "docker pull http://10.140.53.44:5000/centos-tomcat:v0.0.1"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "gc-tomcat",
+                                "tagLen": 1,
+                                "manifest": [
+                                    {
+                                        "name": "gc-tomcat",
+                                        "tag": "v0.0.1",
+                                        "architecture": "amd64",
+                                        "os": "linux",
+                                        "author": "Oliver",
+                                        "id": "f2f18a35a2e62d17f1687482257e8733495d9386ee2fea829555d7b6c3d616a6",
+                                        "parent": "e06b353ca1f35bdd8016aa590233e26f0632404412dde09c3c59aebf04819dd0",
+                                        "created": "2017-05-18T02:56:56.966671227Z",
+                                        "docker_version": "1.12.6",
+                                        "pull": "docker pull http://10.140.53.44:5000/gc-tomcat:v0.0.1"
+                                    }
+                                ]
+                            }
+                        ],
+                        "total": 3
+                    }
+                }
+
+                if(data["data"]["images"].length == 0){
+                    return
+                }
+                var str = "<table id='serviceDetail-table'><thead><tr><td colspan='2'></td></tr></thead><tbody>"
+                for(var a=0; a<data["data"]["images"].length; a++){
+                    var images = data["data"]["images"][a]
+                    var tags = []
+                    for(var b=0; b<images["manifest"].length; b++){
+                        tags.push(images["manifest"][b]["tag"])
+                    }
+                    var tag = images["manifest"][0]["tag"]
+                    var imgs = images["manifest"][0]["pull"].split("//")[1].replace(":"+tag,"")
+                    str += "<div class='serviceDetail' imgs='"+ imgs +"' tag='"+ tags.join(",") +"'>" +
+                        "<div class='infoBox'>" +
+                        "   <span class='name'>"+ imgs + "</span><!-- react-text: 51 --> <!-- /react-text --><br>" +
+                        "</div>" +
+                        "<button type='button' class='ant-btn ant-btn-primary ant-btn-lg'>" +
+                        "   <span>Operation</span>" +
+                        "</button></div>"
+
+                }
+                $("#dockerhub .dataBox").html(str + "</tbody></table>")
+                $("#serviceDetail-table").bootstrapTable({
+                    onLoadSuccess: function () {
+                        $(".serviceDetail button").click(function() {
+                            imageListPopup(this)
+                        });
+                    },onPageChange : function () {
+                        setTimeout(function () {
+                            $(".serviceDetail button").click(function() {
+                                imageListPopup(this)
+                            });
+                        },1000)
+
+                    }
+                })
+                $("#serviceDetail-table > thead").hide()
+                //    $("#create-step").click(function() {
+
+
+
+
+            }
+        });
+
+
+
+        $(".enviroBox .addBtn button").on("click",function () {
+            addEnvironmentVariable()
+        })
+
+        $(".portList .addBtn button").on("click",function () {
+            addPortMapping()
+        })
+
+        $(".enviroBox .fa.fa-trash-o").on("click",function () {
+            $(this).parent().parent().parent().parent().parent().remove()
+        })
+
+        $(".portDetail .fa.fa-trash-o").on("click",function () {
+            $(this).parent().parent().remove()
+        })
+
+        $(".composeList .composeDetail button").each(function () {
+            $(this).on("click",function () {
+                $(".composeDetail button").removeClass("ant-btn-primary")
+                $(".composeDetail button").removeClass("ant-btn-ghost")
+                $(".composeDetail button").addClass("ant-btn-ghost")
+                $(this).removeClass("ant-btn-ghost")
+                $(this).addClass("ant-btn-primary")
+            })
+        })
+
+        $(".ant-collapse-header").on("click",function () {
+            if($(".ant-collapse-item").hasClass("ant-collapse-item-active")){
+                $(".ant-collapse-item").removeClass("ant-collapse-item-active")
+                $(".ant-collapse-content").addClass("ant-collapse-content-inactive")
+                $(".ant-collapse-content").removeClass("ant-collapse-content-active")
+            }else{
+                $(".ant-collapse-item").addClass("ant-collapse-item-active")
+                $(".ant-collapse-content").removeClass("ant-collapse-content-inactive")
+                $(".ant-collapse-content").addClass("ant-collapse-content-active")
+            }
+        })
+
+        $(".changeBtn.ant-switch").on("click",function () {
+            if($(this).hasClass("ant-switch-checked")){
+                //to off
+                $(this).removeClass("ant-switch-checked")
+                $(".stateSpan").html("无状态服务")
+                $(".ant-radio-group").css({
+                    "display": "none",
+                    "margin-left": "10px !important"
+                })
+                $(".volumeDetail").hide()
+            }else {
+                //to on
+                $(this).addClass("ant-switch-checked")
+                $(".stateSpan").html("有状态服务")
+                $(".ant-radio-group").css({
+                    "margin-left": "6px !important",
+                    "display": "inline-block"
+                })
+                $(".volumeDetail").show()
+            }
+        })
+    })
+
+</script>
+
+
+{{ define "js" }}
+    <!--<script src="../static/js/modernizr.min.js"></script>-->
+    <script type="text/javascript" src="../static/plugins/ion-rangeslider/ion.rangeSlider.min.js"></script>
+    <script type="text/javascript" src="../static/plugins/seiyria-bootstrap-slider/dist/bootstrap-slider.min.js"></script>
+    <!--<script type="text/javascript" src="../static/pages/jquery.ui-sliders.js"></script>-->
+
+{{ end }}
+
+{{ define "css"}}
+    <link href="../static/plugins/custombox/dist/custombox.min.css" rel="stylesheet">
+    <!-- ION Slider -->
+    <link href="../static/plugins/ion-rangeslider/ion.rangeSlider.css" rel="stylesheet" type="text/css"/>
+    <link href="../static/plugins/ion-rangeslider/ion.rangeSlider.skinFlat.css" rel="stylesheet" type="text/css"/>
+    <link href="../static/plugins/seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css" rel="stylesheet" type="text/css"/>
+
+{{ end }}
+
+
+{{ define "style"}}
+    <style>
+        .form-control, .form-control:focus {
+            border-color: #d9d9d9 !important;
+            box-shadow: none;
+            border-radius: 3px;
+        }
+        select.form-control option{
+            height: 20px;!important;
+        }
+        .modal-header {
+            background-color: #36404a;
+            color: aliceblue;
+        }
+
+        #myTab li a {
+            border: 1px solid #e5e5e5;
+            color: #666;
+            border-bottom: none;
+        }
+        #myTab li.active a {
+            border-color: #2db7f5;
+            color: #2db7f5;
+            border-bottom: none;
+        }
+        .btn-mirror-default {
+            background-color: #f4f4f4;
+            color: #444;
+            border-color: #ddd;
+        }
+        .btn-mirror-primary {
+            color: #fff;
+            background-color: #2db7f5;
+            border-color: #2db7f5;
+        }
+        .choose-mirror:focus, .choose-mirror:hover {
+            color: #57c5f7;
+            background-color: transparent;
+            border-color: #57c5f7;
+        }
+        .choose-mirror {
+            margin-left: 10px;
+        }
+        .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
+            background: #fff;
+            border-color: #2db7f5;
+            color: #2db7f5;
+        }
+
+        .serverType .serverKey .btns {
+            display: inline-block;
+            padding: 5px 16px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .serverType .serverKey {
+            padding-top: 10px;
+        }
+        .serverType .serverKey .btns.primary {
+            background: #2db7f5;
+            color: #fff;
+            border-radius: 8px;
+        }
+        .dataBox {
+            margin-top: 20px;
+            min-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #e5e5e5;
+        }
+        .dataBox .serviceDetail {
+            width: 100%;
+            height: 50px;
+            border-bottom: 1px solid #e5e5e5;
+        }
+        svg:not(:root) {
+            overflow: hidden;
+        }
+        .dataBox .serviceDetail .infoBox {
+            margin-top: 13px;
+            margin-left: 20px;
+            margin-right: 20px;
+            float: left;
+            width: calc(100% - 221px);
+            line-height: 25px;
+        }
+        .dataBox .serviceDetail button {
+            margin-top: 7px;
+            margin-right: 15px;
+            float: right;
+            width: 81px;
+        }
+        .dataBox .serviceDetail button i {
+            margin-left: 5px;
+        }
+        .fa-arrow-circle-o-right:before {
+            content: "\f18e";
+        }
+        .dataBox .serviceDetail .imgUrl {
+            margin-top: 15px;
+            margin-left: 15px;
+            float: left;
+            width: 65px;
+            height: 65px;
+            padding: 14px;
+            border-radius: 5px;
+            box-shadow: 0 0 5px #c2c2c2;
+        }
+        .ant-btn-lg {
+            padding: 4px 15px 5px;
+            font-size: 12px;
+            border-radius: 6px;
+        }
+        .ant-btn-primary {
+            color: #fff;
+            background-color: #2db7f5;
+            border-color: #2db7f5;
+        }
+
+        .modal-body {
+            font-size: 12px;
+        }
+
+
+    </style>
+
+{{ end }}

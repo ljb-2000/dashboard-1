@@ -1,0 +1,325 @@
+<style>
+    /*.modal-header {*/
+        /*padding: 0px 0px 0px 15px;*/
+        /*border-bottom: 1px solid #e5e5e5;*/
+    /*}*/
+    /*.modal-header .close {*/
+        /*margin: 3px 9px 0px 0px;*/
+    /*}*/
+    .btn-mirror-default {
+        background-color: #f4f4f4;
+        color: #444;
+        border-color: #ddd;
+    }
+    .btn-mirror-primary {
+        color: #fff;
+        background-color: #2db7f5;
+        border-color: #2db7f5;
+    }
+    .choose-mirror:focus, .choose-mirror:hover {
+        color: #57c5f7;
+        background-color: transparent;
+        border-color: #57c5f7;
+    }
+    .choose-mirror {
+        margin-left: 10px;
+    }
+    .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
+        background: #fff;
+        border-color: #2db7f5;
+        color: #2db7f5;
+    }
+
+    .serverType .serverKey .btns {
+        display: inline-block;
+        padding: 5px 16px;
+        cursor: pointer;
+        font-size: 12px;
+    }
+    .serverType .serverKey {
+        padding-top: 10px;
+    }
+    .serverType .serverKey .btns.primary {
+        background: #2db7f5;
+        color: #fff;
+        border-radius: 8px;
+    }
+    /*.dataBox {*/
+        /*margin-top: 20px;*/
+        /*max-height: 400px;*/
+        /*min-height: 200px;*/
+        /*overflow-y: auto;*/
+        /*border: 1px solid #e5e5e5;*/
+    /*}*/
+    .dataBox .serviceDetail {
+        width: 100%;
+        height: 50px;
+        /*border-bottom: 1px solid #e5e5e5;*/
+    }
+    svg:not(:root) {
+        overflow: hidden;
+    }
+    .dataBox .serviceDetail .infoBox {
+        margin-top: -3px;
+        margin-left: 5px;
+        margin-right: 20px;
+        float: left;
+        width: calc(100% - 221px);
+        line-height: 25px;
+    }
+    .dataBox .serviceDetail button {
+        margin-top: 7px;
+        margin-right: 15px;
+        float: right;
+        width: 81px;
+    }
+    .dataBox .serviceDetail button i {
+        margin-left: 5px;
+    }
+    .fa-arrow-circle-o-right:before {
+        content: "\f18e";
+    }
+    /*.dataBox .serviceDetail .imgUrl {*/
+        /*margin-top: 15px;*/
+        /*margin-left: 15px;*/
+        /*float: left;*/
+        /*width: 65px;*/
+        /*height: 65px;*/
+        /*padding: 14px;*/
+        /*border-radius: 5px;*/
+        /*box-shadow: 0 0 5px #c2c2c2;*/
+    /*}*/
+    .ant-btn-lg {
+        padding: 4px 15px 5px;
+        font-size: 12px;
+        border-radius: 6px;
+    }
+    .ant-btn-primary {
+        color: #fff;
+        background-color: #2db7f5;
+        border-color: #2db7f5;
+    }
+
+    .modal-body {
+        font-size: 12px;
+    }
+</style>
+<div id="imageSelect" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModelLabel">
+    <div class="modal-dialog" role="document" style="width: 675px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h3 id="myModalLabel">创建应用</h3>
+            </div>
+            <div class="modal-body">
+                <div class="AppAddServiceModal ">
+                    <div id="AppAddServiceModal ">
+                        <form class="form-horizontal" id="resForm">
+                            <div class="box-header" id="tool-bar">
+                                <span class="titleSpan">选择镜像</span>
+                                <button type="button" class="btn btn-mirror-primary choose-mirror"><span>公 有</span></button>
+                                <button type="button" class="btn btn-mirror-default choose-mirror"><span>私 有</span></button>
+                                <button type="button" class="btn btn-mirror-default choose-mirror"><span>收 藏</span></button>
+                                <div class="box-tools" style="top: 12px">
+                                    <div class="input-group input-group-sm" style="width: 150px;">
+                                        <input type="text" name="table_search" class="form-control pull-right" placeholder="Search">
+                                        <div class="input-group-btn">
+                                            <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="box-body">
+                                <ul id="myTab" class="nav nav-tabs">
+                                    <li class="active">
+                                        <a href="#dockerhub" data-toggle="tab">我的镜像</a>
+                                    </li>
+                                    <li><a href="#minihub" data-toggle="tab">镜像广场</a></li>
+                                </ul>
+                                <div id="myTabContent" class="tab-content">
+                                    <div class="tab-pane fade in active serverType" id="dockerhub">
+                                        <div class="serverKey">
+                                            <span class="btns primary">全部</span>
+                                            <span class="btns">运行环境</span>
+                                            <span class="btns">Web服务器</span>
+                                            <span class="btns">数据库与缓存</span>
+                                            <span class="btns">操作系统</span>
+                                            <span class="btns">中间件与其他</span>
+                                        </div>
+                                        <!--<p>docker官方镜像仓库中心</p>-->
+                                        <div class="dataBox">
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade serverType dataBox" id="minihub">
+                                        <!--<p>mini平台镜像市场</p>-->
+                                        <table id='serviceDetailminihub-table' style='width: 100%' data-toggle='table' data-show-columns='false' data-page-list='[5, 10, 20]' data-page-size='5' data-pagination='true' data-show-pagination-switch='true' >
+                                            <thead style='display: none' >
+                                                <th colspan='2' data-field='data'>data</th>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td colspan='2'>
+                                                        <div class='serviceDetail' imgs='10.252.61.164:5000/stark.l/credit-service' tag='V1.0.0'>
+                                                            <div class='infoBox'>
+                                                                <span class='name'>10.252.61.164:5000/stark.l/credit-service:V1.0.0</span><!-- react-text: 51 --> <!-- /react-text --><br>
+                                                            </div>
+                                                            <button type='button' class='ant-btn ant-btn-primary ant-btn-lg'>
+                                                                <span>部 署</span>
+                                                                <i class='fa fa-arrow-circle-o-right'></i>
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan='2'>
+                                                        <div class='serviceDetail' imgs='10.252.61.164:5000/stark.l/customer-service' tag='V1.0.0'>
+                                                            <div class='infoBox'>
+                                                                <span class='name'>10.252.61.164:5000/stark.l/customer-service:V1.0.0</span><!-- react-text: 51 --> <!-- /react-text --><br>
+                                                            </div>
+                                                            <button type='button' class='ant-btn ant-btn-primary ant-btn-lg'>
+                                                                <span>部 署</span>
+                                                                <i class='fa fa-arrow-circle-o-right'></i>
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan='2'>
+                                                        <div class='serviceDetail' imgs='10.252.61.164:5000/stark.l/eagle-service' tag='V1.0.0'>
+                                                            <div class='infoBox'>
+                                                                <span class='name'>10.252.61.164:5000/stark.l/eagle-service:V1.0.0</span><!-- react-text: 51 --> <!-- /react-text --><br>
+                                                            </div>
+                                                            <button type='button' class='ant-btn ant-btn-primary ant-btn-lg'>
+                                                                <span>部 署</span>
+                                                                <i class='fa fa-arrow-circle-o-right'></i>
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan='2'>
+                                                        <div class='serviceDetail' imgs='10.252.61.164:5000/stark.l/mule-service' tag='V1.0.0'>
+                                                            <div class='infoBox'>
+                                                                <span class='name'>10.252.61.164:5000/stark.l/mule-service:V1.0.0</span><!-- react-text: 51 --> <!-- /react-text --><br>
+                                                            </div>
+                                                            <button type='button' class='ant-btn ant-btn-primary ant-btn-lg'>
+                                                                <span>部 署</span>
+                                                                <i class='fa fa-arrow-circle-o-right'></i>
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan='2'>
+                                                        <div class='serviceDetail' imgs='10.252.61.164:5000/stark.l/webservice' tag='V1.0.0'>
+                                                            <div class='infoBox'>
+                                                                <span class='name'>10.252.61.164:5000/stark.l/webservice:V1.0.0</span><!-- react-text: 51 --> <!-- /react-text --><br>
+                                                            </div>
+                                                            <button type='button' class='ant-btn ant-btn-primary ant-btn-lg'>
+                                                                <span>部 署</span>
+                                                                <i class='fa fa-arrow-circle-o-right'></i>
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan='2'>
+                                                        <div class='serviceDetail' imgs='10.252.61.164:5000/stark.l/ws_core' tag='V0.0.1'>
+                                                            <div class='infoBox'>
+                                                                <span class='name'>10.252.61.164:5000/stark.l/ws_core:V0.0.1</span><!-- react-text: 51 --> <!-- /react-text --><br>
+                                                            </div>
+                                                            <button type='button' class='ant-btn ant-btn-primary ant-btn-lg'>
+                                                                <span>部 署</span>
+                                                                <i class='fa fa-arrow-circle-o-right'></i>
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan='2'>
+                                                        <div class='serviceDetail' imgs='10.252.61.164:5000/tomcat8.5' tag='latest'>
+                                                            <div class='infoBox'>
+                                                                <span class='name'>10.252.61.164:5000/tomcat8.5:latest</span><!-- react-text: 51 --> <!-- /react-text --><br>
+                                                            </div>
+                                                            <button type='button' class='ant-btn ant-btn-primary ant-btn-lg'>
+                                                                <span>部 署</span>
+                                                                <i class='fa fa-arrow-circle-o-right'></i>
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan='2'>
+                                                        <div class='serviceDetail' imgs='10.252.61.164:5000/mysql5.6' tag='latest'>
+                                                            <div class='infoBox'>
+                                                                <span class='name'>10.252.61.164:5000/mysql5.6:latest</span><!-- react-text: 51 --> <!-- /react-text --><br>
+                                                            </div>
+                                                            <button type='button' class='ant-btn ant-btn-primary ant-btn-lg'>
+                                                                <span>部 署</span>
+                                                                <i class='fa fa-arrow-circle-o-right'></i>
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan='2'>
+                                                        <div class='serviceDetail' imgs='10.252.61.164:5000/alpine-tomcat' tag='latest'>
+                                                            <div class='infoBox'>
+                                                                <span class='name'>10.252.61.164:5000/alpine-tomcat:latest</span><!-- react-text: 51 --> <!-- /react-text --><br>
+                                                            </div>
+                                                            <button type='button' class='ant-btn ant-btn-primary ant-btn-lg'>
+                                                                <span>部 署</span>
+                                                                <i class='fa fa-arrow-circle-o-right'></i>
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan='2'>
+                                                        <div class='serviceDetail' imgs='10.252.61.164:5000/stark.l/ws_core_db' tag='v1'>
+                                                            <div class='infoBox'>
+                                                                <span class='name'>10.252.61.164:5000/stark.l/ws_core_db:v1</span><!-- react-text: 51 --> <!-- /react-text --><br>
+                                                            </div>
+                                                            <button type='button' class='ant-btn ant-btn-primary ant-btn-lg'>
+                                                                <span>部 署</span>
+                                                                <i class='fa fa-arrow-circle-o-right'></i>
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan='2'>
+                                                        <div class='serviceDetail' imgs='10.252.61.164:5000/alpine-openjdk' tag='latest'>
+                                                            <div class='infoBox'>
+                                                                <span class='name'>10.252.61.164:5000/alpine-openjdk:latest</span><!-- react-text: 51 --> <!-- /react-text --><br>
+                                                            </div>
+                                                            <button type='button' class='ant-btn ant-btn-primary ant-btn-lg'>
+                                                                <span>部 署</span>
+                                                                <i class='fa fa-arrow-circle-o-right'></i>
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!--<div class="modal-footer">-->
+                <!--<button class="btn btn-primary" id="create-step">下一步</button>-->
+            <!--</div>-->
+        </div>
+    </div>
+</div>
+<script>
+    $(".serverType .serverKey .btns").on("click",function () {
+        $(".serverType .serverKey .btns").removeClass("primary")
+        $(this).addClass("primary")
+    })
+</script>

@@ -1,0 +1,380 @@
+<link rel="stylesheet" href="/static/plugins/portal/css/index.css">
+<div id="addImage" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModelLabel" >
+    <div class="modal-dialog" role="document" style="width: 850px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h3 id="">创建应用</h3>
+            </div>
+            <div class="modal-body">
+                <form class="ant-form ant-form-horizontal">
+                    <div class="box-body">
+                        <table id="imageTagList-table"></table>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer" style="text-align: center">
+
+            </div>
+        </div>
+    </div>
+</div>
+<div id="addapp" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModelLabel" >
+    <div class="modal-dialog" role="document" style="width: 850px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h3 id="myModalLabel">创建应用</h3>
+            </div>
+            <div class="modal-body" id="AppDeployServiceModal">
+                <form class="ant-form ant-form-horizontal"  id="resForm">
+                    <div id="NormalDeployBox">
+                        <div class="topBox">
+                            <div class="inputBox">
+                                <span class="commonSpan">服务名称</span>
+                                <div class="ant-row ant-form-item serviceNameForm">
+                                    <div class="">
+                                        <div class="ant-form-item-control ">
+                                            <span class="ant-input-wrapper">
+                                                <input type="text" id="name" required value="" data-__meta="[object Object]" placeholder="请输入服务名称" autocomplete="off" class="ant-input ant-input-lg">
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="clear: both;"></div>
+                            </div>
+                            <div class="inputBox">
+                                <span class="commonSpan">镜像地址</span>
+                                <div class="ant-row ant-form-item imageUrlForm">
+                                    <div class="">
+                                        <div class="ant-form-item-control ">
+                                            <span class="ant-input-wrapper">
+                                                <input type="text" class="ant-input ant-input-lg imageInput" value="index.tenxcloud.com/tenxcloud/lamp"></span>
+                                            <div style="clear: both;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button disabled="" type="button" class="ant-btn ant-btn-primary ant-btn-lg checkBtn">
+                                    <span>检查地址</span>
+                                </button>
+                                <div style="clear: both;"></div>
+                            </div>
+                            <div class="inputBox">
+                                <span class="commonSpan">镜像版本</span>
+                                <div class="ant-row ant-form-item imageTagForm">
+                                    <div class="">
+                                        <div class="ant-form-item-control has-success">
+                                            <select class="form-control" id="version">
+                                                <option value="latest">latest</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="clear: both;"></div>
+                            </div>
+                        </div>
+                        <div class="infoBox">
+                            <div class="commonTitle">
+                                <div class="line"></div>
+                                <span class="titleSpan">基本配置</span>
+                                <span class="titleIntro">服务的计算资源、服务类型、以及实例个数等设置</span>
+                                <div style="clear: both;"></div>
+                            </div>
+                            <div class="operaBox">
+                                <div class="selectCompose">
+                                    <span class="commonSpan"><!-- react-text: 57 -->容器配置 <!-- /react-text -->
+                                        <a><i class="anticon anticon-question-circle-o"></i></a>
+                                    </span>
+                                    <ul class="composeList">
+                                        <li class="composeDetail">
+                                            <button type="button" class="ant-btn ant-btn-ghost" cpu="200m" memory="512Mi">
+                                                <div class="topBox">2X</div>
+                                                <div class="bottomBox">
+                                                    <span>512Mi&nbsp;内存</span><br>
+                                                    <span style="font-size: 11px">200m CPU&nbsp;(共享)</span>
+                                                    <div class="triangle"></div>
+                                                    <i class="anticon anticon-check"></i>
+                                                </div>
+                                            </button>
+                                        </li>
+                                        <li class="composeDetail">
+                                            <button type="button" class="ant-btn ant-btn-primary" cpu="512m" memory="1024Mi">
+                                                <div class="topBox">4X</div>
+                                                <div class="bottomBox">
+                                                    <span>1024Mi&nbsp;内存</span><br>
+                                                    <span>512m CPU&nbsp;</span>
+                                                    <div class="triangle"></div>
+                                                    <i class="anticon anticon-check"></i>
+                                                </div>
+                                            </button>
+                                        </li>
+                                        <li class="composeDetail">
+                                            <button type="button" class="ant-btn ant-btn-ghost"  cpu="1024m" memory="2048Mi">
+                                                <div class="topBox">8X</div>
+                                                <div class="bottomBox">
+                                                    <span>2048i&nbsp;内存</span><br>
+                                                    <span>1024m CPU&nbsp;</span>
+                                                    <div class="triangle"></div>
+                                                    <i class="anticon anticon-check"></i>
+                                                </div>
+                                            </button>
+                                        </li>
+                                        <li class="composeDetail">
+                                            <button type="button" class="ant-btn ant-btn-ghost" cpu="2048m" memory="4096Mi">
+                                                <div class="topBox">16X</div>
+                                                <div class="bottomBox">
+                                                    <span>4096Mi&nbsp;内存</span><br>
+                                                    <span>2048m CPU</span>
+                                                    <div class="triangle"></div>
+                                                    <i class="anticon anticon-check"></i>
+                                                </div>
+                                            </button>
+                                        </li>
+                                        <li class="composeDetail">
+                                            <button type="button" class="ant-btn ant-btn-ghost" cpu="4096m" memory="8192Mi">
+                                                <div class="topBox">32X</div>
+                                                <div class="bottomBox">
+                                                    <span>8192Mi&nbsp;内存</span><br>
+                                                    <span>4096m CPU</span>
+                                                    <div class="triangle"></div>
+                                                    <i class="anticon anticon-check"></i>
+                                                </div>
+                                            </button>
+                                        </li>
+                                    </ul>
+                                    <div style="clear: both;"></div>
+                                </div>
+                                <div class="stateService">
+                                    <span class="commonSpan"><!-- react-text: 109 -->服务类型 <!-- /react-text -->
+                                        <a href="http://docs.tenxcloud.com/faq#you-zhuang-tai-fu-wu-yu-wu-zhuang-tai-fu-wu-de-qu-bie" target="_blank">
+                                            <i class="anticon anticon-question-circle-o"></i>
+                                        </a>
+                                    </span>
+                                    <span id="volumeSwitch" data-__meta="[object Object]" class="changeBtn ant-switch" tabindex="0">
+                                        <span class="ant-switch-inner"></span>
+                                    </span>
+                                    <i class="anticon anticon-question-circle-o" style="vertical-align: middle; margin-left: 10px; display: none;"></i>
+                                    <span class="stateSpan">无状态服务</span>
+                                    <div class="ant-radio-group" style="display: none; margin-left: 10px;">
+                                        <label class="ant-radio-wrapper ant-radio-wrapper-checked">
+                                            <span class="ant-radio ant-radio-checked ant-radio ant-radio-checked ant-radio-checked-1">
+                                                <span class="ant-radio-inner"></span>
+                                                <input type="radio" class="ant-radio-input" value="on"></span>
+                                            <span>分布式存储</span>
+                                        </label>
+                                    </div>
+                                    <!--<span id="localStorageTip">&lt;!&ndash; react-text: 339 &ndash;&gt;Tips：选择『本地存储』时，为保证有状态有效，推荐使用『绑定节点』功能&nbsp;&lt;!&ndash; /react-text &ndash;&gt;<i class="anticon anticon-question-circle-o"></i></span>-->
+
+                                    <div>
+                                        <ul>
+                                            <li class="volumeDetail" style="display: none">
+                                                <div class="input">
+                                                    <span class="ant-input-wrapper">
+                                                        <input type="text" class="ant-input volumeInt" placeholder="存储卷名称" value="">
+                                                    </span>
+                                                </div>
+                                                <div class="input">
+                                                    <div class="ant-input-number volumeInt">
+                                                        <div class="ant-input-number-input-wrap">
+                                                            <input type="number" step="512" min="512" max="20480" class="ant-input-number-input" placeholder="存储卷大小" autocomplete="off" value="512">
+                                                        </div>
+                                                    </div>
+                                                    <div class="imageTag ant-select ant-select-enabled">
+                                                        <select class="form-control" style="height: 27px;padding-top: 3px;border-radius: 3px;">
+                                                            <option value="ext4">ext4</option>
+                                                            <option value="xfs">xfs</option>
+                                                        </select>
+                                                    </div>
+                                                    <button type="button" class="ant-btn">
+                                                        <span>创建存储卷</span>
+                                                    </button>
+                                                </div>
+                                                <div style="clear: both;"></div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div style="clear: both;"></div>
+                                </div>
+                                <div class="containerNum">
+                                    <span class="commonSpan">实例数量</span>
+                                    <div class="ant-row ant-form-item">
+                                        <div class="">
+                                            <div class="ant-form-item-control has-success">
+                                                <div class="ant-input-number ant-input-number-lg inputNum">
+                                                    <div class="ant-input-number-input-wrap">
+                                                        <input step="1" min="1" max="10" class="ant-input-number-input" id="instanceNum" value="1" type="number" autocomplete="off">
+                                                    </div>
+                                                </div><!-- react-text: 136 -->&nbsp;&nbsp;个<!-- /react-text -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div style="clear: both;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ant-collapse-item">
+                        <div class="ant-collapse-header" role="tab" aria-expanded="true">
+                            <i class="arrow"></i>
+                            <div class="commonTitle">
+                                <div class="line"></div>
+                                <span class="titleSpan">高级设置</span>
+                                <span class="titleIntro">在高级设置里，您可以修改环境变量配置，以及容器与主机端口的映射</span>
+                                <div style="clear: both;"></div>
+                            </div>
+                        </div>
+                        <div class="ant-collapse-content ant-collapse-content-inactive" role="tabpanel">
+                            <div class="ant-collapse-content-box">
+                                <div id="advanceBox">
+                                    <div class="advanceBox">
+                                        <div class="enviroBox">
+                                            <span class="title">环境变量</span>
+                                            <div class="enviroList">
+                                                <div class="enviroTitle">
+                                                    <div class="enviroCommonTitle">
+                                                        <span>键</span>
+                                                    </div>
+                                                    <div class="enviroCommonTitle">
+                                                        <span>值</span>
+                                                    </div>
+                                                    <div class="enviroCommonTitle">
+                                                        <span>操作</span>
+                                                    </div>
+                                                    <div style="clear: both;"></div>
+                                                </div>
+                                                <div>
+                                                    <ul>
+                                                        <div class="ant-row ant-form-item">
+                                                            <div class="">
+                                                                <div class="ant-form-item-control ">
+                                                                    <li class="enviroDetail">
+                                                                        <div class="input">
+                                                                            <div class="ant-row ant-form-item">
+                                                                                <div class="">
+                                                                                    <div class="ant-form-item-control ">
+                                                                                        <span class="ant-input-wrapper">
+                                                                                            <input type="text" id="envName8" value="" data-__meta="[object Object]" class="ant-input ant-input-lg composeUrl">
+                                                                                        </span>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="input">
+                                                                            <span class="ant-input-wrapper">
+                                                                                <input type="text" id="envValue8" value="" data-__meta="[object Object]" class="ant-input ant-input-lg composeUrl">
+                                                                            </span>
+                                                                        </div>
+                                                                        <div class="opera">
+                                                                            <i class="fa fa-trash-o"></i>
+                                                                        </div><div style="clear: both;">
+                                                                    </div>
+                                                                    </li>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </ul>
+                                                    <div class="addBtn">
+                                                        <button type="button" class="ant-btn ant-btn-primary">
+                                                            <i class="anticon anticon-plus-circle-o"></i>
+                                                            <span>添加环境变量</span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="portBox">
+                                            <span class="title">映射端口</span>
+                                            <div class="portList">
+                                                <div class="portTitle">
+                                                    <div class="portCommonTitle">
+                                                        <span>容器端口</span>
+                                                    </div>
+                                                    <div class="protocol portCommonTitle">
+                                                        <span>协议</span>
+                                                    </div>
+                                                    <div class="mapping portCommonTitle">
+                                                        <span>映射服务端口</span>
+                                                    </div>
+                                                    <div class="opera portCommonTitle">
+                                                        <span>操作</span>
+                                                    </div>
+                                                    <div style="clear: both;"></div>
+                                                </div>
+                                                <div>
+                                                    <ul>
+                                                        <div>
+                                                            <li class="portDetail">
+                                                                <div class="input">
+                                                                    <div class="ant-row ant-form-item">
+                                                                        <div class="">
+                                                                            <div class="ant-form-item-control ">
+                                                                                <span class="ant-input-wrapper">
+                                                                                    <input type="text" id="targetPortUrl4" value="" data-__meta="[object Object]" class="ant-input ant-input-lg composeUrl">
+                                                                                </span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="protocol select">
+                                                                    <div class="ant-row ant-form-item portGroupForm">
+                                                                        <div class="">
+                                                                            <div class="ant-form-item-control has-success">
+                                                                                <div class="ant-select-lg portGroup ant-select-show-search ant-select ant-select-enabled">
+                                                                                    <select class="form-control">
+                                                                                        <option value="HTTP">HTTP</option>
+                                                                                        <option value="TCP" selected>TCP</option>
+                                                                                    </select>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="mapping">
+                                                                    <div class="podPort">
+                                                                        <div class="tcpDiv">
+                                                                            <div class="ant-select-lg tcpSelect ant-select ant-select-enabled">
+                                                                                <select class="form-control" style="width: auto">
+                                                                                    <option value="动态生成" selected>动态生成</option>
+                                                                                    <option value="指定端口">指定端口</option>
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="ant-row ant-form-item tcpInputForm tcpInputForm3" style="display: none"><div class=""><div class="ant-form-item-control "><span class="ant-input-wrapper"><input type="text" id="portUrl3" value="" data-__meta="[object Object]" class="ant-input ant-input-lg" style="width: 100px;"></span></div></div></div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="opera">
+                                                                    <i class="fa fa-trash-o"></i>
+                                                                </div>
+                                                                <div style="clear: both;"></div>
+                                                            </li>
+                                                        </div>
+                                                    </ul>
+                                                    <div class="addBtn">
+                                                        <button type="button" class="ant-btn ant-btn-primary">
+                                                            <i class="anticon anticon-plus-circle-o"></i>
+                                                            <span>添加映射端口</span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer" style="text-align: center">
+                <!--<button class="btn btn-primary" id="createApp">创建</button>-->
+                <!--<button class="btn btn-danger" data-dismiss="modal" aria-hidden="true" id="">取消</button>-->
+                <button type="button" class="ant-btn ant-btn-ghost ant-btn-lg cancelBtn" style="width: 100px" onclick="$('#addapp').modal('hide')"><span>取 消</span></button>
+                <button type="submit" class="ant-btn ant-btn-primary ant-btn-lg createBtn" id="createApp"  onclick="createApp()" style="width: 100px"><span>创 建</span></button>
+            </div>
+        </div>
+    </div>
+</div>

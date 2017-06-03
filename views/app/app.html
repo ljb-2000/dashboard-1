@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html>
+{{template "header.html"}}
+
+<body class="hold-transition skin-blue sidebar-mini fixed">
+
+    <input type="text" name="content" id="content" value={{.content}} hidden="true" />
+    <div class="wrapper">
+        {{template "../svg.html"}}
+        <!-- Main Header -->
+        {{template "../mainheader.html"}}
+        <!-- Left side column. contains the logo and sidebar -->
+        {{template "../sidebar.html"}}
+        <!-- Content Wrapper. Contains page content -->
+        {{template "../app/content.html"}}
+        <!-- /.content-wrapper -->
+        <!---->
+        {{template "../app/addapp.html"}}
+        <!---->
+        {{template "../app/imageSelect.html"}}
+        <!---->
+        {{template "../app/scaleapp.html"}}
+        <!---->
+        {{template "../app/rollapp.html"}}
+        <!---->
+        {{template "../app/expensiveapp.html"}}
+        <!---->
+        <!-- Main Footer -->
+        {{template "../footer.html"}}
+
+    </div>
+
+
+</body>
+
+<style>
+
+    #myTabContent .fixed-table-toolbar {
+        margin-top: -42px;
+    }
+
+    #myTabContent .bootstrap-table .columns.columns-right.btn-group.pull-right button {
+        background-color: #2db7f5 !important;
+        border: 1px solid #2db7f5 !important;
+    }
+
+    #myTabContent #minihub .bootstrap-table .columns.columns-right.btn-group.pull-right button {
+        margin-top: -10px;
+    }
+
+    table tbody tr td .serviceDetail .imgUrl {
+        margin-top: 5px;
+        margin-left: 5px;
+        float: left;
+        width: 50px;
+        height: 50px;
+        padding: 14px;
+        border-radius: 5px;
+        box-shadow: 0 0 5px #c2c2c2;
+    }
+</style>
+<script type="text/javascript" src="../../static/plugins/d3/d3.js"></script>
+<script type="text/javascript" src="../../static/plugins/c3/c3.min.js"></script>
+<link rel="stylesheet" href="../../static/plugins/c3/c3.css">
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css"/>
+<script type="text/javascript">
+    var refreshTable = ""
+    $(document).ready(function () {
+
+        //TO DELETE SOON
+        $("#serviceDetailminihub-table").bootstrapTable()
+        $("#serviceDetailminihub-table > thead").hide()
+
+        refreshTable = setInterval(function () {
+            loadTable()
+        },10000)
+    })
+
+    $(function() {
+
+        row = $('#table').bootstrapTable('getSelections');
+        if (row.length > 0) {
+            $('#stopapp').prop('disabled', false)
+            $('#startapp').prop('disabled', false)
+            $('#deleteapp').prop('disabled', false)
+
+            $('#scale').prop('disabled', false)
+            $('#rollupdate').prop('disabled', false)
+            $('#expensive').prop('disabled', false)
+            $('#more').prop('disabled', false)
+
+            $("#stopapp").click(stopApp);
+            $("#startapp").click(startApp);
+            $("#deleteapp").click(deleteApp);
+
+            $('#scale').click(scaleApp);
+            $('#rollupdate').click(rollupdateApp);
+            $('#expensive').click(expensiveApp);
+            $('#tb_refresh').click(loadTable);
+        } else {
+
+        }
+
+        $("#createapp").click(function() {
+            $('#imageSelect').modal('show');
+            //        $.ajax({
+            //            type: 'GET',
+            ////            url: "http://10.252.252.112:7788/proxy/10.140.53.44:9092/api/v1/images",
+            //            url: "http://images.pai9.net:7788/proxy/10.140.53.44:9092/api/v1/images",
+            //            dataType: 'JSON',
+            //            contentType: "application/json",
+            //            success: function(data, status) {
+            //                console.log(data)
+            //            },
+            //            error: function(XHR, status, errorThrown) {
+            //
+            //            }
+            //        });
+
+
+            ///////////////////////////////////////////  clean popup cache start
+            if(!$("#myTab li:first").hasClass("active")){
+                $("#myTab li").removeClass("active")
+                $("#myTab li:first").addClass("active")
+                $(".tab-pane.fade.serverType").removeClass("active in")
+                $("#dockerhub").addClass("active in")
+            }
+
+            $(".enviroList ul").empty()
+            $(".portList ul").empty()
+            addPortMapping()
+            addEnvironmentVariable()
+            if($(".ant-collapse-content").hasClass("ant-collapse-content-active")){
+                $(".ant-collapse-content").removeClass("ant-collapse-content-active")
+                $(".ant-collapse-content").addClass("ant-collapse-content-inactive")
+                $(".ant-collapse-item").removeClass("ant-collapse-item-active")
+                $(".ant-collapse-item").addClass("ant-collapse-item-inactive")
+            }
+
+            ///////////////////////////////////////////  clean popup cache end
+            $("#dockerhub .dataBox .bootstrap-table").remove()
+            $("#dockerhub .dataBox .clearfix").remove()
+            $.ajax({
+                type: 'GET',
+                url: "http://10.5.9.47:9092/api/v1/images",
+                dataType: 'JSON',
+                contentType: "application/json",
+                success: function(data, status) {
+                    console.log(data.data)
+
+                    if(data["data"]["images"].length == 0){
+                        return
+                    }
+
+                    var str = "<table id='serviceDetail-table' style='width: 100%' data-toggle='table' " +
+                        "data-show-columns='false' data-page-list='[5, 10, 20]' " +
+                        "data-page-size='5' data-pagination='true' " +
+                        "data-show-pagination-switch='true' ><thead style='display: none' ><tr><th colspan='2' " +
+                        "data-field='data'>data</th> <tr></thead><tbody>"
+                    for(var a=0; a<data["data"]["images"].length; a++){
+                        var images = data["data"]["images"][a]
+                        var tag = images["manifest"][0]["tag"]
+                        var imgs = images["manifest"][0]["pull"].split("//")[1].replace(":"+tag,"")
+                        str += "<tr><td colspan='2'><div class='serviceDetail' imgs='"+ imgs +"' tag='"+ tag +"'>" +
+                            "<div class='infoBox'>" +
+                            "<svg class='imgUrl'><use xmlns:xlink='http://www.w3.org/1999/xlink' " +
+                            "xlink:href='#appcenterlogo'></use></svg><br><span class='name' " +
+                            "style='padding-left: 10px'>"+ imgs + ":" + tag +"</span><!-- react-text: 51 --> <!-- /react-text -->" +
+                            "</div>" +
+                            "<button type='button' class='ant-btn ant-btn-primary ant-btn-lg'>" +
+                            "   <span>部 署</span>" +
+                            "   <i class='fa fa-arrow-circle-o-right'></i>" +
+                            "</button></div></td></tr>"
+                    }
+
+                    $("#dockerhub .dataBox").html(str + "</tbody></table>")
+//                    $("#serviceDetail-table").bootstrapTable()
+                    $("#serviceDetail-table").bootstrapTable({
+                        onAll : function () {
+                            $("#myTabContent .pull-left.pagination-detail button").removeClass("btn-default").addClass("btn-xs btn-info")
+//                            setTimeout(function () {
+//                                $(".serviceDetail button").click(function() {
+                                    $(".serviceDetail button").click(function() {
+                                        $('#imageSelect').modal('hide')
+                                        $('#addapp').modal('show');
+
+                                        var image = $(this).parent().attr("imgs")
+                                        var tag = $(this).parent().attr("tag")
+                                        var verTag = "<option value='latest' selected>latest</option>"
+                                        if(tag){
+                                            console.log("tags   >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+                                            var tags = tag.split(",")
+                                            for(var a=0; a<tags.length; a++){
+                                                console.log("tags   ",tags)
+                                                verTag += "<option value='"+ tags[a] +"' >"+ tags[a] +"</option>"
+                                            }
+
+                                        }
+                                        $('.ant-input.ant-input-lg.imageInput').val(image)
+                                        $('#name').val("")
+                                        $('#version').html(verTag)
+                                        $('#instanceNum').val(1)
+
+                                        $('#addapp > div > div .modal-body').css({
+                                            'max-height':$(window).height()*0.75,
+                                            'overflow': 'auto'
+                                        })
+                                    });
+//                                });
+//                            },1000)
+
+                        }
+                    })
+
+                    $("#serviceDetail-table > thead").hide()
+                    $(".serviceDetail button").click(function() {
+//                        $(".serviceDetail button").click(function() {
+                            $('#imageSelect').modal('hide')
+                            $('#addapp').modal('show');
+
+                            var image = $(this).parent().attr("imgs")
+                            var tag = $(this).parent().attr("tag")
+                            var verTag = "<option value='latest' selected>latest</option>"
+                            if(tag){
+                                console.log("tags   >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+                                var tags = tag.split(",")
+                                for(var a=0; a<tags.length; a++){
+                                    console.log("tags   ",tags)
+                                    verTag += "<option value='"+ tags[a] +"' >"+ tags[a] +"</option>"
+                                }
+                            }
+                            $('.ant-input.ant-input-lg.imageInput').val(image)
+                            $('#name').val("")
+                            $('#version').html(verTag)
+                            $('#instanceNum').val(1)
+
+                            $('#addapp > div > div .modal-body').css({
+                                'max-height':$(window).height()*0.75,
+                                'overflow': 'auto'
+                            })
+//                        });
+                    });
+                    //    $("#create-step").click(function() {
+
+                },
+                error: function(XHR, status, errorThrown) {
+                    console.log(XHR);
+                    console.log(status);
+                    console.log(errorThrown);
+                }
+            });
+
+
+    //        var data = {
+    //            "status": "200",
+    //            "msg": {
+    //                "images": [{
+    //                    "pull": "docker pull http://127.0.0.1:5000/centos-tomcat:v0.0.1",
+    //                    "name": "centos-tomcat",
+    //                    "parent": "75368a89a98775e10cdd327d39744f54ef602fe88f581533a9e89a343f497aaa",
+    //                    "author": "Oliver",
+    //                    "created": "2017-05-16T07:58:22.110268373Z",
+    //                    "tag": "v0.0.1",
+    //                    "architecture": "amd64",
+    //                    "docker_version": "1.12.6",
+    //                    "os": "linux",
+    //                    "id": "7c39eba802476f54eca49714ae34b046d60162c5421a97c1992c31ee6cd565d2"
+    //                }],
+    //                "total": 0
+    //            },
+    //            "api": "1.0",
+    //            "err": "OK"
+    //        }
+//            var data = {
+//                "apiversion": "v1",
+//                "status": "200",
+//                "data": {
+//                    "images": [
+//                        {
+//                            "name": "centos-tomcat",
+//                            "tagLen": 1,
+//                            "manifest": [
+//                                {
+//                                    "name": "centos-tomcat",
+//                                    "tag": "v0.0.1",
+//                                    "architecture": "amd64",
+//                                    "os": "linux",
+//                                    "author": "Oliver",
+//                                    "id": "7c39eba802476f54eca49714ae34b046d60162c5421a97c1992c31ee6cd565d2",
+//                                    "parent": "75368a89a98775e10cdd327d39744f54ef602fe88f581533a9e89a343f497aaa",
+//                                    "created": "2017-05-16T07:58:22.110268373Z",
+//                                    "docker_version": "1.12.6",
+//                                    "pull": "docker pull http://127.0.0.1:5000/centos-tomcat:v0.0.1"
+//                                }
+//                            ]
+//                        }
+//                    ],
+//                    "total": 1
+//                }
+//            }
+
+//            var data = {
+//                "apiversion": "v1",
+//                "status": "200",
+//                "data": {
+//                    "images": [
+//                        {
+//                            "name": "alpine-nginx",
+//                            "tagLen": 2,
+//                            "manifest": [
+//                                {
+//                                    "name": "alpine-nginx",
+//                                    "tag": "v0.0.2",
+//                                    "architecture": "amd64",
+//                                    "os": "linux",
+//                                    "author": "oliver",
+//                                    "id": "f999fdedf120a36b1c6d5302d7846c5efee0e53238801c2693e8d230cabf432a",
+//                                    "parent": "6a8802d8edfb06220416524ca06b42b586186368718105e6a85e37127dd0b320",
+//                                    "created": "2017-05-17T07:46:39.22561393Z",
+//                                    "docker_version": "1.12.6",
+//                                    "pull": "docker pull http://10.140.53.44:5000/alpine-nginx:v0.0.2"
+//                                },
+//                                {
+//                                    "name": "alpine-nginx",
+//                                    "tag": "v0.0.1",
+//                                    "architecture": "amd64",
+//                                    "os": "linux",
+//                                    "author": "oliver",
+//                                    "id": "f999fdedf120a36b1c6d5302d7846c5efee0e53238801c2693e8d230cabf432a",
+//                                    "parent": "6a8802d8edfb06220416524ca06b42b586186368718105e6a85e37127dd0b320",
+//                                    "created": "2017-05-17T07:46:39.22561393Z",
+//                                    "docker_version": "1.12.6",
+//                                    "pull": "docker pull http://10.140.53.44:5000/alpine-nginx:v0.0.1"
+//                                }
+//                            ]
+//                        },
+//                        {
+//                            "name": "centos-tomcat",
+//                            "tagLen": 1,
+//                            "manifest": [
+//                                {
+//                                    "name": "centos-tomcat",
+//                                    "tag": "v0.0.1",
+//                                    "architecture": "amd64",
+//                                    "os": "linux",
+//                                    "author": "Oliver",
+//                                    "id": "7c39eba802476f54eca49714ae34b046d60162c5421a97c1992c31ee6cd565d2",
+//                                    "parent": "75368a89a98775e10cdd327d39744f54ef602fe88f581533a9e89a343f497aaa",
+//                                    "created": "2017-05-16T07:58:22.110268373Z",
+//                                    "docker_version": "1.12.6",
+//                                    "pull": "docker pull http://10.140.53.44:5000/centos-tomcat:v0.0.1"
+//                                }
+//                            ]
+//                        },
+//                        {
+//                            "name": "gc-tomcat",
+//                            "tagLen": 1,
+//                            "manifest": [
+//                                {
+//                                    "name": "gc-tomcat",
+//                                    "tag": "v0.0.1",
+//                                    "architecture": "amd64",
+//                                    "os": "linux",
+//                                    "author": "Oliver",
+//                                    "id": "f2f18a35a2e62d17f1687482257e8733495d9386ee2fea829555d7b6c3d616a6",
+//                                    "parent": "e06b353ca1f35bdd8016aa590233e26f0632404412dde09c3c59aebf04819dd0",
+//                                    "created": "2017-05-18T02:56:56.966671227Z",
+//                                    "docker_version": "1.12.6",
+//                                    "pull": "docker pull http://10.140.53.44:5000/gc-tomcat:v0.0.1"
+//                                }
+//                            ]
+//                        }
+//                    ],
+//                    "total": 3
+//                }
+//            }
+//
+//            var str = ""
+//            if(data["data"]["images"].length == 0){
+//                return
+//            }
+//
+//            for(var a=0; a<data["data"]["images"].length; a++){
+//                var images = data["data"]["images"][a]
+//                var tags = []
+//                for(var b=0; b<images["manifest"].length; b++){
+//                    tags.push(images["manifest"][b]["tag"])
+//                }
+//                var tag = images["manifest"][0]["tag"]
+//                var imgs = images["manifest"][0]["pull"].split("//")[1].replace(":"+tag,"")
+//                str += "<div class='serviceDetail' imgs='"+ imgs +"' tag='"+ tags.join(",") +"'>" +
+//                    "<div class='infoBox'>" +
+//                    "   <span class='name'>"+ imgs + "</span><!-- react-text: 51 --> <!-- /react-text --><br>" +
+//                    "</div>" +
+//                    "<button type='button' class='ant-btn ant-btn-primary ant-btn-lg'>" +
+//                    "   <span>部 署</span>" +
+//                    "   <i class='fa fa-arrow-circle-o-right'></i>" +
+//                    "</button></div>"
+//
+//            }
+//            $("#dockerhub .dataBox").html(str)
+            //    $("#create-step").click(function() {
+            $(".serviceDetail button").click(function() {
+                $('#imageSelect').modal('hide')
+                $('#addapp').modal('show');
+
+                var image = $(this).parent().attr("imgs")
+                var tag = $(this).parent().attr("tag")
+                var verTag = "<option value='latest' selected>latest</option>"
+                if(tag){
+                    console.log("tags   >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+                    var tags = tag.split(",")
+                    for(var a=0; a<tags.length; a++){
+                        console.log("tags   ",tags)
+                        verTag += "<option value='"+ tags[a] +"' >"+ tags[a] +"</option>"
+                    }
+
+                }
+                $('.ant-input.ant-input-lg.imageInput').val(image)
+                $('#name').val("")
+                $('#version').html(verTag)
+                $('#instanceNum').val(1)
+
+                $('#addapp > div > div .modal-body').css({
+                    'max-height':$(window).height()*0.75,
+                    'overflow': 'auto'
+                })
+            });
+        });
+
+
+
+        $("#scaleapp").click(function() {
+            $('#scaleApp').modal('show');
+            $("#instanceCountAdd").ionRangeSlider({
+                type: "single",
+                grid: true,
+                min: 1,
+                max: 10
+            });
+        });
+        $("#rollupdateapp").click(function() {
+            getImageList()
+            $('#rollupdateApp').modal('show');
+
+        });
+        $("#expensiveapp").click(function() {
+            $('#expensiveApp').modal('show');
+        });
+        $("#createApp").click(createApp);
+        loadTable()
+
+    })
+
+        function loadTable() {
+            console.log(new Date())
+            $.ajax({
+                type: 'GET',
+                url: "http://10.5.9.47:9090/api/v1/apps",
+                dataType: 'JSON',
+                success: function(data, status) {
+                    if(!$('#MainContent').is(":visible")){
+                        clearInterval(refreshTable)
+                    }
+                    if(data.msg){
+                        data.data = data.msg
+                    }
+                    $('#table').bootstrapTable({
+                        striped: true, //是否显示行间隔色
+                        cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+                        pagination: true, //是否显示分页（*）
+                        sortable: true, //是否启用排序
+                        sortOrder: "ID asc", //排序方式
+                        pageNumber: 1, //初始化加载第一页，默认第一页
+                        pageSize: 20, //每页的记录行数（*）
+                        pageList: [20, 50, 100, 150], //可供选择的每页的行数（*）
+                        striped: true,
+                        strictSearch: true,
+                        clickToSelect: true,
+                        singleSelect: true,
+                        columns: [ {
+                            field: "选择",
+                            checkbox:  true,
+                            title: "选择",
+                            class: "tablebody",
+                            align: "center",
+                            valign: "middle"
+                        }, {
+                            field: 'name',
+                            title: '应用名称',
+                            align: "center",
+                            valign: "middle",
+                            sortable: true,
+                            formatter: function (value, row, index) {
+                                return "<a onclick='showContainer(this)'>"+ value +"</a>"
+                            }
+                        }, {
+                            field: 'status',
+                            title: '状态',
+                            align: "center",
+                            valign: "middle",
+                            sortable: true,
+                            formatter: function(value, row, index) {
+                                if (value == 0) {
+                                    return "<span class='label label-default'>创建中</span>"
+                                    //return '创建中';  // btn btn-default waves-effect waves-light
+                                }
+                                if (value == 1) {
+                                    return "<span class='label label-info'>成功</span>"
+        //                            return '成功';    // class="btn btn-info waves-effect waves-light"
+                                }
+                                if (value == 2) {
+                                    return "<span class='label label-warning'>失败</span>"
+        //                            return '失败';    // class="btn btn-warning waves-effect waves-light"
+                                }
+                                if (value == 3) {
+                                    return "<span class='label label-success'>运行中</span>"
+        //                            return "<button class='btn btn-success waves-effect waves-light'>运行中</button>"
+                                    //return '运行中';  //  class="btn btn-success waves-effect waves-light"
+                                }
+                                if (value == 4) {
+                                    return "<span class='label label-pink'>停止</span>"
+        //                            return '停止';    // class="btn btn-pink waves-effect waves-light"
+                                }
+                                return "<span class='label label-danger'>未知错误</span>"
+        //                        return "未知错误";     // class="btn btn-danger waves-effect waves-light"
+                            }
+                        }, {
+                            field: 'instanceCount',
+                            title: '容器个数',
+                            align: "center",
+                            valign: "middle",
+                            sortable: true,
+                            formatter : function (value) {
+                                return "<span class='badge'>"+ value +"</span>"
+                            }
+                        }, {
+                            field: 'url',
+                            title: '访问地址',
+                            align: "center",
+                            valign: "middle",
+                            sortable: true,
+                            formatter: function(value, row, index) {
+                                var a = '<a href="' + value + '" >' + value + '</a>';
+                                return a;
+                            }
+                        }, {
+                            field: 'create_at',
+                            title: '创建时间',
+                            align: "center",
+                            valign: "middle",
+                            sortable: true
+                        }],
+                        data: data.data
+                    });
+                    $(".chk-btn").attr("disabled",true)
+                    $("#table tbody tr").on("click",function () {
+                        var ctr = true
+                        $("#table tr").each(function () {
+                            if($(this).find("input").eq(0).is(":checked")){
+                                ctr =  false
+                            }
+                        })
+                        $(".chk-btn").attr("disabled",ctr)
+
+                    })
+                    $("#table").on('check.bs.table uncheck.bs.table ' +
+                        'check-all.bs.table uncheck-all.bs.table', function () {
+                        var ctr = true
+                        $("#table tr").each(function () {
+                            if($(this).find("input").eq(0).is(":checked")){
+                                ctr =  false
+                            }
+                        })
+                        $(".chk-btn").attr("disabled",ctr)
+                    });
+                    var ctr = true
+                    $("#table tr").each(function () {
+                        if($(this).find("input").eq(0).is(":checked")){
+                            ctr =  false
+                        }
+                    })
+                    $(".chk-btn").attr("disabled",ctr)
+
+                },
+                error: function(XHR, status, errorThrown) {
+                    console.log(XHR);
+                    console.log(status);
+                    console.log(errorThrown);
+                }
+            });
+        }
+
+        function createApp() {
+        //    appName = $('#appname').val()
+        //    image = $('#image').val() + ":" + $('#version').val()
+        //    cpu = $('#cpu').val()
+        //    memory = $('#memory').val()
+        //    instanceCnt = $('#instanceCnt').val()
+        //    remark = $('#remark').val()
+            var appName = $('#name').val()
+            var image = $('.ant-input.ant-input-lg.imageInput').val() + ":" + $('#version').val()
+            var cpu = $("#NormalDeployBox .composeDetail .ant-btn.ant-btn-primary").attr("cpu")
+            var memory = $("#NormalDeployBox .composeDetail .ant-btn.ant-btn-primary").attr("memory")
+            var instanceCnt = $('#instanceNum').val()
+
+            var valid = true
+            $(".topBox input").each(function () {
+                if($(this).val() == ""){
+                    $(this).on("keyup",function () {
+                        $(this).parent().parent().removeClass("has-error")
+                    })
+                    if(!$(this).parent().parent().hasClass("has-error")){
+                        $(this).parent().parent().addClass("has-error")
+                    }
+                    valid = false
+                    return false
+                }
+            })
+            if(!valid){
+                $.Notification.autoHideNotify('warning', 'top right', 'Fillup empty fields','<br>')
+                return
+            }
+            console.log(JSON.stringify({
+                "name": appName,
+                "region": "north",
+                "memory": memory,
+                "cpu": cpu,
+                "instanceCount": Number(instanceCnt),
+                "image": image,
+                "userName": "oliver",
+                "remark": "this is a test web application"
+            }))
+            $.ajax({
+                type: 'POST',
+                url: "http://10.5.9.47:9090/api/v1/apps",
+                dataType: 'JSON',
+                contentType: "application/json",
+                data: JSON.stringify({
+                    "name": appName,
+                    "region": "north",
+                    "memory": memory,
+                    "cpu": cpu,
+                    "instanceCount": Number(instanceCnt),
+                    "image": image,
+                    "userName": "oliver",
+                    "remark": "this is a test web application"
+                }),
+                success: function(data, status) {
+        //            alert(data.msg)
+                    $('#addapp').modal('hide');
+                    $('#table').bootstrapTable("destroy")
+                    loadTable()
+                    $.Notification.autoHideNotify('success', 'top right', 'Create success','<br>')
+                },
+                error: function(XHR, status, errorThrown) {
+                    console.log(XHR);
+                    console.log(status);
+                    console.log(errorThrown);
+                    $('#table').bootstrapTable("destroy")
+                    loadTable()
+                    $.Notification.autoHideNotify('error', 'top right', 'Create error','<br>')
+                }
+            });
+
+        }
+
+        function stopApp(){
+            row=$('#table').bootstrapTable('getSelections');
+            if (row.length>0){
+                $.ajax({
+                    type: 'PATCH',
+                    url: "http://10.5.9.47:9090/api/v1/apps",
+                    dataType: 'JSON',
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        "name": row[0].name,
+                        "userName": "oliver"
+                    }),
+                    success: function(data, status) {
+                        if (data.status == "200") {
+                            $.Notification.autoHideNotify('success', 'top right','<br>', data.msg)
+                        } else {
+                            $.Notification.autoHideNotify('error', 'top right','<br>', data.err)
+                        }
+                        $('#table').bootstrapTable("destroy")
+                        loadTable()
+                    },
+                    error: function(XHR, status, errorThrown) {
+                        console.log(XHR);
+                        console.log(status);
+                        console.log(errorThrown);
+                        $('#table').bootstrapTable("destroy")
+                        loadTable()
+                        $.Notification.autoHideNotify('error', 'top right', 'Stop error','<br>')
+                    }
+                });
+            }else{
+                $.Notification.autoHideNotify('error', 'top right', '请选择一个应用在进行相关操作r','<br>')
+            }
+
+        }
+
+        function startApp(){
+            row=$('#table').bootstrapTable('getSelections');
+            if (row.length>0){
+                $.ajax({
+                    type: 'PUT',
+                    url: "http://10.5.9.47:9090/api/v1/apps",
+                    dataType: 'JSON',
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        "name": row[0].name,
+                        "userName": "oliver"
+                    }),
+                    success: function(data, status) {
+                        if (data.status == "200") {
+                            $.Notification.autoHideNotify('success', 'top right','<br>', data.msg)
+                        } else {
+                            $.Notification.autoHideNotify('error', 'top right','<br>', data.err)
+                        }
+                        $('#table').bootstrapTable("destroy")
+                        loadTable()
+                    },
+                    error: function(XHR, status, errorThrown) {
+                        console.log(XHR);
+                        console.log(status);
+                        console.log(errorThrown);
+                        $('#table').bootstrapTable("destroy")
+                        loadTable()
+                        $.Notification.autoHideNotify('error', 'top right', 'Start error','<br>')
+                    }
+                });
+            }else{
+                $.Notification.autoHideNotify('warning', 'top right', '<br>', '请选择一个应用在进行相关操作')
+            }
+        }
+
+        function deleteApp(){
+            row=$('#table').bootstrapTable('getSelections');
+            if (row.length>0){
+                $.ajax({
+                    type: 'DELETE',
+                    url: "http://10.5.9.47:9090/api/v1/apps",
+                    dataType: 'JSON',
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        "name": row[0].name,
+                        "userName": "oliver"
+                    }),
+                    success: function(data, status) {
+
+                        if (data.status == "200") {
+                                $.Notification.autoHideNotify('success', 'top right','<br>',data.msg)
+                        }else{
+                            $.Notification.autoHideNotify('error', 'top right','<br>',data.data)
+                        }
+
+                        $('#table').bootstrapTable("destroy")
+                        loadTable()
+
+                    },
+                    error: function(XHR, status, errorThrown) {
+                        console.log(XHR);
+                        console.log(status);
+                        console.log(errorThrown);
+                        $('#table').bootstrapTable("destroy")
+                        loadTable()
+                        $.Notification.autoHideNotify('error', 'top right', 'Delete error','<br>')
+                    }
+                });
+            }else{
+                $.Notification.autoHideNotify('error', 'top right', '<br>', '请选择一个应用在进行相关操作')
+            }
+        }
+
+        function scaleApp() {
+            $('#scaleApp').modal('hide');
+            cnt = $('#instanceCountAdd').val()
+            console.log(cnt)
+            row = $('#table').bootstrapTable('getSelections');
+            if (row.length>0){
+                $.ajax({
+                    type: 'PATCH',
+                    url: "http://10.5.9.47:9090/api/v1/apps/scale",
+                    dataType: 'JSON',
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        "name": row[0].name,
+                        "instanceCount": Number(cnt),
+                        "userName": "oliver"
+                    }),
+                    success: function(data, status) {
+                        if (data.status == "201") {
+                            $.Notification.autoHideNotify('success', 'top right', '<br>', data.msg)
+                        }else {
+                            $.Notification.autoHideNotify('error', 'top right', '<br>', data.err)
+                        }
+                        $('#table').bootstrapTable("destroy")
+                        loadTable()
+                        $("#instanceCountAdd").data("ionRangeSlider").reset()
+                    },
+                    error: function(XHR, status, errorThrown) {
+                        console.log(XHR);
+                        console.log(status);
+                        console.log(errorThrown);
+                        $.Notification.autoHideNotify('error', 'top right', 'error', '<br>')
+                        $('#table').bootstrapTable("destroy")
+                        loadTable()
+                        $("#instanceCountAdd").data("ionRangeSlider").reset()
+                    }
+                });
+            }else{
+                $.Notification.autoHideNotify('error', 'top right', '<br>', '请选择一个应用在进行相关操作')
+            }
+        }
+
+        function rollupdateApp() {
+            $('#rollupdateApp').modal('hide');
+            image = $('#img').val()
+            version = $('#ver').val()
+            row = $('#table').bootstrapTable('getSelections');
+            if (row.length>0){
+                $.ajax({
+                    type: 'POST',
+                    url: "http://10.5.9.47:9090/api/v1/apps/rollupdate",
+                    dataType: 'JSON',
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        "name": row[0].name,
+                        "image": image + ":" + version,
+                        "userName": "oliver"
+                    }),
+                    success: function(data, status) {
+                        if (data.status == "201") {
+                            $.Notification.autoHideNotify('success', 'top right', '<br>', data.msg)
+                        }else{
+                            $.Notification.autoHideNotify('error', 'top right', '<br>', data.err)
+                        }
+                        $('#table').bootstrapTable("destroy")
+                        loadTable()
+                    },
+                    error: function(XHR, status, errorThrown) {
+                        console.log(XHR);
+                        console.log(status);
+                        console.log(errorThrown);
+                        $.Notification.autoHideNotify('error', 'top right', 'error', '<br>')
+                    }
+                });
+            }else{
+                $.Notification.autoHideNotify('error', 'top right', '请选择一个应用在进行相关操作', '<br>')
+            }
+
+        }
+
+        function expensiveApp() {
+            $('#expensiveApp').modal('hide');
+        //    var cpu = $('#cp').val()
+        //    var memory = $('#mem').val()
+            var cpu = $("#expensiveAppUnit .composeDetail .ant-btn.ant-btn-primary").attr("cpu")
+            var memory = $("#expensiveAppUnit .composeDetail .ant-btn.ant-btn-primary").attr("memory")
+            var row = $('#table').bootstrapTable('getSelections');
+            if (row.length>0){
+                $.ajax({
+                    type: 'PUT',
+                    url: "http://10.5.9.47:9090/api/v1/apps/expansion",
+                    dataType: 'JSON',
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        "name": row[0].name,
+                        "cpu": cpu,
+                        "memory": memory,
+                        "userName": "oliver"
+                    }),
+                    success: function(data, status) {
+                        if (data.status == "201") {
+                            $.Notification.autoHideNotify('success', 'top right', '<br>', data.msg)
+                        }else{
+                            $.Notification.autoHideNotify('error', 'top right', '<br>', data.err)
+                        }
+                    },
+                    error: function(XHR, status, errorThrown) {
+                        console.log(XHR);
+                        console.log(status);
+                        console.log(errorThrown);
+                        $.Notification.autoHideNotify('error', 'top right', 'error', '<br>')
+                    }
+                });
+            }else{
+                $.Notification.autoHideNotify('success', 'top right', '<br>', "请选择一个应用在进行相关操作")
+            }
+        }
+
+        function getImageList() {
+
+            $("#listver").html("")
+            $("#ver").val("")
+            $("#ver").attr("disabled",true)
+            $("#img").val("")
+            $("#listimg").html()
+            var imageList = {
+                "apiversion": "v1",
+                "status": "200",
+                "data": {
+                    "images": [
+                        {
+                            "name": "alpine-nginx",
+                            "tagLen": 2,
+                            "manifest": [
+                                {
+                                    "name": "alpine-nginx",
+                                    "tag": "v0.0.2",
+                                    "architecture": "amd64",
+                                    "os": "linux",
+                                    "author": "oliver",
+                                    "id": "f999fdedf120a36b1c6d5302d7846c5efee0e53238801c2693e8d230cabf432a",
+                                    "parent": "6a8802d8edfb06220416524ca06b42b586186368718105e6a85e37127dd0b320",
+                                    "created": "2017-05-17T07:46:39.22561393Z",
+                                    "docker_version": "1.12.6",
+                                    "pull": "docker pull http://10.140.53.44:5000/alpine-nginx:v0.0.2"
+                                },
+                                {
+                                    "name": "alpine-nginx",
+                                    "tag": "v0.0.1",
+                                    "architecture": "amd64",
+                                    "os": "linux",
+                                    "author": "oliver",
+                                    "id": "f999fdedf120a36b1c6d5302d7846c5efee0e53238801c2693e8d230cabf432a",
+                                    "parent": "6a8802d8edfb06220416524ca06b42b586186368718105e6a85e37127dd0b320",
+                                    "created": "2017-05-17T07:46:39.22561393Z",
+                                    "docker_version": "1.12.6",
+                                    "pull": "docker pull http://10.140.53.44:5000/alpine-nginx:v0.0.1"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "centos-tomcat",
+                            "tagLen": 1,
+                            "manifest": [
+                                {
+                                    "name": "centos-tomcat",
+                                    "tag": "v0.0.1",
+                                    "architecture": "amd64",
+                                    "os": "linux",
+                                    "author": "Oliver",
+                                    "id": "7c39eba802476f54eca49714ae34b046d60162c5421a97c1992c31ee6cd565d2",
+                                    "parent": "75368a89a98775e10cdd327d39744f54ef602fe88f581533a9e89a343f497aaa",
+                                    "created": "2017-05-16T07:58:22.110268373Z",
+                                    "docker_version": "1.12.6",
+                                    "pull": "docker pull http://10.140.53.44:5000/centos-tomcat:v0.0.1"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "gc-tomcat",
+                            "tagLen": 1,
+                            "manifest": [
+                                {
+                                    "name": "gc-tomcat",
+                                    "tag": "v0.0.1",
+                                    "architecture": "amd64",
+                                    "os": "linux",
+                                    "author": "Oliver",
+                                    "id": "f2f18a35a2e62d17f1687482257e8733495d9386ee2fea829555d7b6c3d616a6",
+                                    "parent": "e06b353ca1f35bdd8016aa590233e26f0632404412dde09c3c59aebf04819dd0",
+                                    "created": "2017-05-18T02:56:56.966671227Z",
+                                    "docker_version": "1.12.6",
+                                    "pull": "docker pull http://10.140.53.44:5000/gc-tomcat:v0.0.1"
+                                }
+                            ]
+                        }
+                    ],
+                    "total": 3
+                }
+            }
+
+
+            var images = imageList["data"]["images"]
+            var name = "<option value=''>"
+            for(var a=0; a<images.length; a++){
+                name += "<option value='"+images[a]['name']+"'>"
+            }
+            console.log(imageList)
+            $("#listimg").html(name)
+
+            $("#img").on("change",function () {
+                var selImage = $(this).val()
+                $("#listver").html("")
+                $("#ver").attr("disabled",true)
+                if(selImage){
+                    $("#ver").attr("disabled",false)
+                }
+                var tags = "<option value=''>"
+                for(var b=0; b<images.length; b++){
+                    if(images[b]['name'] == selImage){
+                        for(var c=0; c<images[b]["manifest"].length; c++){
+                            var manifestTag = images[b]["manifest"][c]
+                            tags += "<option value='"+manifestTag['tag']+"'>"
+                        }
+                        $("#listver").html(tags)
+                        $("#ver").attr("disabled",false)
+                        break
+                    }
+                }
+            })
+        }
+
+        function showContainer(ths) {
+            $("#MainContent").hide()
+            $("#containerContent").show()
+//            $.ajax({
+//                type: 'GET',
+//                url: "http://10.5.9.47:9090/api/v1/apps",
+//                dataType: 'JSON',
+//                success: function(data, status) {
+//                    console.log("--> data   ",data)
+//                    if(data.msg){
+//                        data.data = data.msg
+//                    }
+                    var containerdata = {"cluster":"CID-fab5b135e7b2","data":[{"metadata":{"name":"tets-1076887165-wmno3","generateName":"tets-1076887165-","namespace":"huangjia","selfLink":"/api/v1/namespaces/huangjia/pods/tets-1076887165-wmno3","uid":"82bd04ff-41c3-11e7-87d3-1866daebbf08","resourceVersion":"52382821","creationTimestamp":"2017-05-26T03:29:22Z","labels":{"name":"tets","pod-template-hash":"1076887165","tenxcloud.com/appName":"test1","tenxcloud.com/svcName":"tets"},"annotations":{"kubernetes.io/created-by":"{\"kind\":\"SerializedReference\",\"apiVersion\":\"v1\",\"reference\":{\"kind\":\"ReplicaSet\",\"namespace\":\"huangjia\",\"name\":\"tets-1076887165\",\"uid\":\"3a5b0fa7-37e6-11e7-a0c7-1418773517bc\",\"apiVersion\":\"extensions\",\"resourceVersion\":\"52382792\"}}\n"},"ownerReferences":[{"apiVersion":"extensions/v1beta1","kind":"ReplicaSet","name":"tets-1076887165","uid":"3a5b0fa7-37e6-11e7-a0c7-1418773517bc","controller":true}]},"spec":{"volumes":[{"name":"default-token-7y5ba","secret":{"secretName":"default-token-7y5ba","defaultMode":420}}],"containers":[{"name":"tets","image":"index.tenxcloud.com/carrotzpc/docker-2048:latest","args":["nginx","-g","daemon off;"],"ports":[{"containerPort":80,"protocol":"TCP"}],"env":[{"name":"PATH","value":"/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"}],"resources":{"limits":{"cpu":"1","memory":"512Mi"},"requests":{"cpu":"100m","memory":"512Mi"}},"volumeMounts":[{"name":"default-token-7y5ba","readOnly":true,"mountPath":"/var/run/secrets/kubernetes.io/serviceaccount"}],"terminationMessagePath":"/dev/termination-log","imagePullPolicy":"Always"}],"restartPolicy":"Always","terminationGracePeriodSeconds":30,"dnsPolicy":"ClusterFirst","serviceAccountName":"default","serviceAccount":"default","nodeName":"slave-node-1","securityContext":{}},"status":{"phase":"Running","conditions":[{"type":"Initialized","status":"True","lastProbeTime":null,"lastTransitionTime":"2017-05-26T03:29:22Z"},{"type":"Ready","status":"True","lastProbeTime":null,"lastTransitionTime":"2017-05-26T03:29:27Z"},{"type":"PodScheduled","status":"True","lastProbeTime":null,"lastTransitionTime":"2017-05-26T03:29:22Z"}],"hostIP":"192.168.11.6","podIP":"192.168.181.211","startTime":"2017-05-26T03:29:22Z","containerStatuses":[{"name":"tets","state":{"running":{"startedAt":"2017-05-26T03:29:27Z"}},"lastState":{},"ready":true,"restartCount":0,"image":"index.tenxcloud.com/carrotzpc/docker-2048:latest","imageID":"docker://sha256:1a40b15fe5eb8c32a6a9769e9f5e5e527ca7b7b2f285789a3e21e88ab87e8b28","containerID":"docker://446fbc970d59bb46d4db8b7aab525e685439003d91feff21f635649276e18d34"}]},"images":["index.tenxcloud.com/carrotzpc/docker-2048:latest"]}],"total":1,"count":1}
+                    $('#container-table').bootstrapTable({
+                        striped: true, //是否显示行间隔色
+                        cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+                        pagination: true, //是否显示分页（*）
+                        sortable: true, //是否启用排序
+                        sortOrder: "ID asc", //排序方式
+                        pageNumber: 1, //初始化加载第一页，默认第一页
+                        pageSize: 20, //每页的记录行数（*）
+                        pageList: [20, 50, 100, 150], //可供选择的每页的行数（*）
+                        striped: true,
+                        strictSearch: true,
+                        clickToSelect: true,
+                        singleSelect: true,
+                        columns: [ {
+                            field: "选择",
+                            checkbox:  true,
+                            class: "tablebody",
+                            align: "center",
+                            valign: "middle"
+                        }, {
+                            field: 'name',
+                            title: '容器名称',
+                            align: "center",
+                            valign: "middle",
+                            sortable: true,
+                            formatter: function (value, row, index) {
+                                return "<a onclick=\"$('.content').eq(1).hide();$('#ContainerDetail').show();$('#ContainerDetailButton').show()\">"+ row.metadata.name +"</a>"
+                            }
+                        }, {
+                            field: 'status',
+                            title: '状态',
+                            align: "center",
+                            valign: "middle",
+                            sortable: true,
+                            formatter: function (value, row, index) {
+                                return row.status.phase
+                            }
+                        }, {
+                            field: 'instanceCount',
+                            title: '所属应用',
+                            align: "center",
+                            valign: "middle",
+                            sortable: true,
+                            formatter : function (value, row) {
+                                return "<a>" + row.metadata.labels["tenxcloud.com/appName"] + "</a>"
+                            }
+                        }, {
+                            field: 'images',
+                            title: '镜像',
+                            align: "center",
+                            valign: "middle",
+                            sortable: true,
+                            formatter: function(value, row, index) {
+                                return row.images[0];
+                            }
+                        }, {
+                            field: 'visitIp',
+                            title: '访问地址',
+                            align: "center",
+                            valign: "middle",
+                            sortable: true,
+                            formatter: function (value, row, index) {
+                                return row.status.podIP
+                            }
+                        }, {
+                            field: 'create_at',
+                            title: '创建时间',
+                            align: "center",
+                            valign: "middle",
+                            sortable: true,
+                            formatter: function () {
+                                return "computed time"
+                            }
+                        }, {
+                            field: 'option',
+                            title: '操作',
+                            align: "center",
+                            valign: "middle",
+                            sortable: true,
+                            formatter: function () {
+                                var operation =  "<select class='form-control'><option>option</option></select>"
+                                return operation
+                            }
+                        }],
+                        data : containerdata.data
+                    });
+
+//                },
+//                error: function(XHR, status, errorThrown) {
+//                    console.log(XHR);
+//                    console.log(status);
+//                    console.log(errorThrown);
+//                }
+//            });
+
+        }
+
+
+        function CPUChart() {
+            console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ,CPUChart")
+            var datas = {"cluster":"CID-fab5b135e7b2","containerName":"web1-3771192691-rkjkb","data":[{"containerName":"web1-3771192691-rkjkb","start":"2017-05-29T06:36:03.964Z","type":"cpu/usage_rate","metrics":[{"timestamp":"05-29 14:36","value":0,"floatValue":0.1},{"timestamp":"05-29 14:37","value":0,"floatValue":0.11},{"timestamp":"05-29 14:38","value":0,"floatValue":0.1},{"timestamp":"05-29 14:39","value":0,"floatValue":0.11},{"timestamp":"05-29 14:40","value":0,"floatValue":0.11},{"timestamp":"05-29 14:41","value":0,"floatValue":0.1},{"timestamp":"05-29 14:42","value":0,"floatValue":0.11},{"timestamp":"05-29 14:43","value":0,"floatValue":0.1},{"timestamp":"05-29 14:44","value":0,"floatValue":0.1},{"timestamp":"05-29 14:45","value":0,"floatValue":0.1},{"timestamp":"05-29 14:46","value":0,"floatValue":0.1},{"timestamp":"05-29 14:47","value":0,"floatValue":0.1},{"timestamp":"05-29 14:48","value":0,"floatValue":0.1},{"timestamp":"05-29 14:49","value":0,"floatValue":0.1},{"timestamp":"05-29 14:50","value":0,"floatValue":0.1},{"timestamp":"05-29 14:51","value":0,"floatValue":0.1},{"timestamp":"05-29 14:52","value":0,"floatValue":0.1},{"timestamp":"05-29 14:53","value":0,"floatValue":0.1},{"timestamp":"05-29 14:54","value":0,"floatValue":0.1},{"timestamp":"05-29 14:55","value":0,"floatValue":0.1},{"timestamp":"05-29 14:56","value":0,"floatValue":0.1},{"timestamp":"05-29 14:57","value":0,"floatValue":0.1},{"timestamp":"05-29 14:58","value":0,"floatValue":0.1},{"timestamp":"05-29 14:59","value":0,"floatValue":0.1},{"timestamp":"05-29 15:00","value":0,"floatValue":0.1},{"timestamp":"05-29 15:01","value":0,"floatValue":0.1},{"timestamp":"05-29 15:02","value":0,"floatValue":0.1},{"timestamp":"05-29 15:03","value":0,"floatValue":0.1},{"timestamp":"05-29 15:04","value":0,"floatValue":0.1},{"timestamp":"05-29 15:05","value":0,"floatValue":0.1},{"timestamp":"05-29 15:06","value":0,"floatValue":0.09},{"timestamp":"05-29 15:07","value":0,"floatValue":0.1},{"timestamp":"05-29 15:08","value":0,"floatValue":0.1},{"timestamp":"05-29 15:09","value":0,"floatValue":0.1},{"timestamp":"05-29 15:10","value":0,"floatValue":0.1},{"timestamp":"05-29 15:11","value":0,"floatValue":0.1},{"timestamp":"05-29 15:12","value":0,"floatValue":0.09},{"timestamp":"05-29 15:13","value":0,"floatValue":0.1},{"timestamp":"05-29 15:14","value":0,"floatValue":0.09},{"timestamp":"05-29 15:15","value":0,"floatValue":0.1},{"timestamp":"05-29 15:16","value":0,"floatValue":0.1},{"timestamp":"05-29 15:17","value":0,"floatValue":0.1},{"timestamp":"05-29 15:18","value":0,"floatValue":0.1},{"timestamp":"05-29 15:19","value":0,"floatValue":0.09},{"timestamp":"05-29 15:20","value":0,"floatValue":0.1},{"timestamp":"05-29 15:21","value":0,"floatValue":0.09},{"timestamp":"05-29 15:22","value":0,"floatValue":0.09},{"timestamp":"05-29 15:23","value":0,"floatValue":0.09},{"timestamp":"05-29 15:24","value":0,"floatValue":0.1},{"timestamp":"05-29 15:25","value":0,"floatValue":0.09},{"timestamp":"05-29 15:26","value":0,"floatValue":0.09},{"timestamp":"05-29 15:27","value":0,"floatValue":0.09},{"timestamp":"05-29 15:28","value":0,"floatValue":0.09},{"timestamp":"05-29 15:29","value":0,"floatValue":0.1},{"timestamp":"05-29 15:30","value":0,"floatValue":0.1},{"timestamp":"05-29 15:31","value":0,"floatValue":0.1},{"timestamp":"05-29 15:32","value":0,"floatValue":0.1},{"timestamp":"05-29 15:33","value":0,"floatValue":0.1},{"timestamp":"05-29 15:34","value":0,"floatValue":0.5},{"timestamp":"05-29 15:35","value":0,"floatValue":0.1},{"timestamp":"05-29 15:36","value":0,"floatValue":0.5}],"statusCode":200}]}
+            var data = [datas.containerName]
+            var tickValues = [datas.containerName]
+
+            var metrics = datas["data"][0]["metrics"]
+
+            var label = []
+            for(var a=0; a<metrics.length; a++){
+                tickValues.push(metrics[a]["timestamp"])
+                var datetime = metrics[a]["timestamp"]//.split(" ").join("-17") + ":00"
+                label.push(datetime)
+
+                data.push(metrics[a]["floatValue"].toFixed(1))
+
+            }
+            console.log("tickValues ",tickValues)
+            console.log("label ",label)
+            console.log("data ",data)
+            c3.generate({
+                bindto: '#CPU-line-chart',
+                data: {
+                    columns: [
+                        data
+                    ]
+                },
+                axis: {
+                    x: {
+                        type: "category",
+                        categories: label,
+                        tick: {
+                            culling: {
+                                max: 5
+                            },
+                            multiline: false
+                        }
+                    },
+                    show: true
+                },
+                grid: {
+                    x: {
+                        show: true
+                    },
+                    y: {
+                        show: true
+                    }
+                }
+
+            });
+        }
+
+
+    function NetworkChart() {
+        console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ,NetworkChart")
+        var datasRX = {"cluster":"CID-fab5b135e7b2","containerName":"web1-3771192691-rkjkb","data":[{"containerName":"web1-3771192691-rkjkb","start":"2017-05-29T07:02:14.593Z","type":"network/rx_rate","metrics":[{"timestamp":"05-29 15:02","value":0,"floatValue":0},{"timestamp":"05-29 15:03","value":0,"floatValue":0},{"timestamp":"05-29 15:04","value":0,"floatValue":0},{"timestamp":"05-29 15:05","value":0,"floatValue":0},{"timestamp":"05-29 15:06","value":0,"floatValue":0},{"timestamp":"05-29 15:07","value":0,"floatValue":0},{"timestamp":"05-29 15:08","value":0,"floatValue":0},{"timestamp":"05-29 15:09","value":0,"floatValue":0},{"timestamp":"05-29 15:10","value":0,"floatValue":0},{"timestamp":"05-29 15:11","value":0,"floatValue":0},{"timestamp":"05-29 15:12","value":0,"floatValue":0},{"timestamp":"05-29 15:13","value":0,"floatValue":4},{"timestamp":"05-29 15:14","value":0,"floatValue":0},{"timestamp":"05-29 15:15","value":0,"floatValue":0},{"timestamp":"05-29 15:16","value":0,"floatValue":0},{"timestamp":"05-29 15:17","value":0,"floatValue":0},{"timestamp":"05-29 15:18","value":0,"floatValue":0},{"timestamp":"05-29 15:19","value":0,"floatValue":2},{"timestamp":"05-29 15:20","value":0,"floatValue":0},{"timestamp":"05-29 15:21","value":0,"floatValue":0},{"timestamp":"05-29 15:22","value":0,"floatValue":0},{"timestamp":"05-29 15:23","value":0,"floatValue":0},{"timestamp":"05-29 15:24","value":0,"floatValue":0},{"timestamp":"05-29 15:25","value":0,"floatValue":0},{"timestamp":"05-29 15:26","value":0,"floatValue":0},{"timestamp":"05-29 15:27","value":5,"floatValue":0},{"timestamp":"05-29 15:28","value":0,"floatValue":0},{"timestamp":"05-29 15:29","value":0,"floatValue":3},{"timestamp":"05-29 15:30","value":0,"floatValue":0},{"timestamp":"05-29 15:31","value":0,"floatValue":0},{"timestamp":"05-29 15:32","value":0,"floatValue":0},{"timestamp":"05-29 15:33","value":0,"floatValue":0},{"timestamp":"05-29 15:34","value":0,"floatValue":0},{"timestamp":"05-29 15:35","value":0,"floatValue":0},{"timestamp":"05-29 15:36","value":0,"floatValue":1},{"timestamp":"05-29 15:37","value":0,"floatValue":0},{"timestamp":"05-29 15:38","value":0,"floatValue":0},{"timestamp":"05-29 15:39","value":0,"floatValue":0},{"timestamp":"05-29 15:40","value":0,"floatValue":0},{"timestamp":"05-29 15:41","value":6,"floatValue":0},{"timestamp":"05-29 15:42","value":0,"floatValue":0},{"timestamp":"05-29 15:43","value":0,"floatValue":0},{"timestamp":"05-29 15:44","value":0,"floatValue":0},{"timestamp":"05-29 15:45","value":0,"floatValue":8},{"timestamp":"05-29 15:46","value":0,"floatValue":0},{"timestamp":"05-29 15:47","value":9,"floatValue":0},{"timestamp":"05-29 15:48","value":0,"floatValue":0},{"timestamp":"05-29 15:49","value":0,"floatValue":0},{"timestamp":"05-29 15:50","value":0,"floatValue":0},{"timestamp":"05-29 15:51","value":0,"floatValue":0},{"timestamp":"05-29 15:52","value":0,"floatValue":0},{"timestamp":"05-29 15:53","value":0,"floatValue":0},{"timestamp":"05-29 15:54","value":0,"floatValue":0},{"timestamp":"05-29 15:55","value":0,"floatValue":0},{"timestamp":"05-29 15:56","value":0,"floatValue":0},{"timestamp":"05-29 15:57","value":0,"floatValue":0},{"timestamp":"05-29 15:58","value":0,"floatValue":0},{"timestamp":"05-29 15:59","value":0,"floatValue":0},{"timestamp":"05-29 16:00","value":0,"floatValue":10},{"timestamp":"05-29 16:01","value":0,"floatValue":0},{"timestamp":"05-29 16:02","value":7,"floatValue":0}],"statusCode":200}]}
+        var dataRX = [datasRX.containerName + " RX"]
+        var tickValuesRX = [datasRX.containerName + " RX"]
+        var metricsRX = datasRX["data"][0]["metrics"]
+
+
+        var datasTX = {"cluster":"CID-fab5b135e7b2","containerName":"web1-3771192691-rkjkb","data":[{"containerName":"web1-3771192691-rkjkb","start":"2017-05-29T07:02:14.593Z","type":"network/rx_rate","metrics":[{"timestamp":"05-29 15:02","value":0,"floatValue":0},{"timestamp":"05-29 15:03","value":0,"floatValue":0},{"timestamp":"05-29 15:04","value":0,"floatValue":0},{"timestamp":"05-29 15:05","value":0,"floatValue":0},{"timestamp":"05-29 15:06","value":0,"floatValue":0},{"timestamp":"05-29 15:07","value":0,"floatValue":0},{"timestamp":"05-29 15:08","value":0,"floatValue":0},{"timestamp":"05-29 15:09","value":0,"floatValue":0},{"timestamp":"05-29 15:10","value":0,"floatValue":0},{"timestamp":"05-29 15:11","value":0,"floatValue":0},{"timestamp":"05-29 15:12","value":0,"floatValue":0},{"timestamp":"05-29 15:13","value":0,"floatValue":0},{"timestamp":"05-29 15:14","value":0,"floatValue":6},{"timestamp":"05-29 15:15","value":0,"floatValue":0},{"timestamp":"05-29 15:16","value":0,"floatValue":0},{"timestamp":"05-29 15:17","value":0,"floatValue":0},{"timestamp":"05-29 15:18","value":0,"floatValue":4},{"timestamp":"05-29 15:19","value":0,"floatValue":0},{"timestamp":"05-29 15:20","value":0,"floatValue":0},{"timestamp":"05-29 15:21","value":0,"floatValue":10},{"timestamp":"05-29 15:22","value":0,"floatValue":0},{"timestamp":"05-29 15:23","value":0,"floatValue":0},{"timestamp":"05-29 15:24","value":0,"floatValue":8},{"timestamp":"05-29 15:25","value":0,"floatValue":7},{"timestamp":"05-29 15:26","value":0,"floatValue":0},{"timestamp":"05-29 15:27","value":0,"floatValue":0},{"timestamp":"05-29 15:28","value":0,"floatValue":0},{"timestamp":"05-29 15:29","value":0,"floatValue":0},{"timestamp":"05-29 15:30","value":0,"floatValue":0},{"timestamp":"05-29 15:31","value":0,"floatValue":0},{"timestamp":"05-29 15:32","value":0,"floatValue":0},{"timestamp":"05-29 15:33","value":0,"floatValue":0},{"timestamp":"05-29 15:34","value":0,"floatValue":0},{"timestamp":"05-29 15:35","value":0,"floatValue":0},{"timestamp":"05-29 15:36","value":0,"floatValue":0},{"timestamp":"05-29 15:37","value":0,"floatValue":0},{"timestamp":"05-29 15:38","value":0,"floatValue":1},{"timestamp":"05-29 15:39","value":0,"floatValue":0},{"timestamp":"05-29 15:40","value":0,"floatValue":0},{"timestamp":"05-29 15:41","value":0,"floatValue":0},{"timestamp":"05-29 15:42","value":0,"floatValue":0},{"timestamp":"05-29 15:43","value":0,"floatValue":0},{"timestamp":"05-29 15:44","value":0,"floatValue":0},{"timestamp":"05-29 15:45","value":0,"floatValue":0},{"timestamp":"05-29 15:46","value":0,"floatValue":2},{"timestamp":"05-29 15:47","value":0,"floatValue":0},{"timestamp":"05-29 15:48","value":0,"floatValue":0},{"timestamp":"05-29 15:49","value":0,"floatValue":0},{"timestamp":"05-29 15:50","value":0,"floatValue":0},{"timestamp":"05-29 15:51","value":0,"floatValue":0},{"timestamp":"05-29 15:52","value":0,"floatValue":0},{"timestamp":"05-29 15:53","value":0,"floatValue":0},{"timestamp":"05-29 15:54","value":0,"floatValue":5},{"timestamp":"05-29 15:55","value":0,"floatValue":0},{"timestamp":"05-29 15:56","value":9,"floatValue":0},{"timestamp":"05-29 15:57","value":0,"floatValue":0},{"timestamp":"05-29 15:58","value":0,"floatValue":0},{"timestamp":"05-29 15:59","value":0,"floatValue":0},{"timestamp":"05-29 16:00","value":0,"floatValue":0},{"timestamp":"05-29 16:01","value":0,"floatValue":3},{"timestamp":"05-29 16:02","value":0,"floatValue":0}],"statusCode":200}]}
+        var dataTX = [datasTX.containerName + " TX"]
+//        var tickValuesTX = [datasTX.containerName]
+
+        var metricsTX = datasTX["data"][0]["metrics"]
+
+        var label = []
+        for(var a=0; a<metricsRX.length; a++){
+            tickValuesRX.push(metricsRX[a]["timestamp"])
+            var datetime = metricsRX[a]["timestamp"]//.split(" ").join("-17") + ":00"
+            label.push(datetime)
+
+            dataRX.push(metricsRX[a]["floatValue"].toFixed(1))
+            dataTX.push(metricsTX[a]["floatValue"].toFixed(1))
+
+        }
+        console.log("tickValues ",tickValuesRX)
+        console.log("label ",label)
+        console.log("data ",dataRX)
+        c3.generate({
+            bindto: '#NETWORK-line-chart',
+            data: {
+                columns: [
+                    dataRX,
+                    dataTX
+                ]
+            },
+            axis: {
+                x: {
+                    type: "category",
+                    categories: label,
+                    tick: {
+                        culling: {
+                            max: 5
+                        },
+                        multiline: false
+                    }
+                },
+                show: true
+
+            },
+            legend: {
+                position: "top"
+            },
+            grid: {
+                x: {
+                    show: true
+                },
+                y: {
+                    show: true
+                }
+            }
+
+        });
+    }
+
+    function MemoryChart() {
+        console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ,MemoryChart")
+        var datas = {"cluster":"CID-fab5b135e7b2","containerName":"web1-3771192691-rkjkb","data":[{"containerName":"web1-3771192691-rkjkb","start":"2017-05-29T06:33:47.759Z","type":"memory/usage","metrics":[{"timestamp":"05-29 14:33","value":180944896,"floatValue":180944896},{"timestamp":"05-29 14:34","value":180944896,"floatValue":180944896},{"timestamp":"05-29 14:35","value":180944896,"floatValue":180944896},{"timestamp":"05-29 14:36","value":180944896,"floatValue":180944896},{"timestamp":"05-29 14:37","value":180944896,"floatValue":180944896},{"timestamp":"05-29 14:38","value":180944896,"floatValue":180944896},{"timestamp":"05-29 14:39","value":180944896,"floatValue":180944896},{"timestamp":"05-29 14:40","value":180944896,"floatValue":180944896},{"timestamp":"05-29 14:41","value":180944896,"floatValue":180944896},{"timestamp":"05-29 14:42","value":180944896,"floatValue":180944896},{"timestamp":"05-29 14:43","value":180944896,"floatValue":180944896},{"timestamp":"05-29 14:44","value":180944896,"floatValue":180944896},{"timestamp":"05-29 14:45","value":180944896,"floatValue":180944896},{"timestamp":"05-29 14:46","value":180944896,"floatValue":180944896},{"timestamp":"05-29 14:47","value":180944896,"floatValue":180944896},{"timestamp":"05-29 14:48","value":180944896,"floatValue":180944896},{"timestamp":"05-29 14:49","value":180944896,"floatValue":180944896},{"timestamp":"05-29 14:50","value":180944896,"floatValue":180944896},{"timestamp":"05-29 14:51","value":180944896,"floatValue":180944896},{"timestamp":"05-29 14:52","value":180944896,"floatValue":180944896},{"timestamp":"05-29 14:53","value":180944896,"floatValue":180944896},{"timestamp":"05-29 14:54","value":180944896,"floatValue":180944896},{"timestamp":"05-29 14:55","value":180944896,"floatValue":180944896},{"timestamp":"05-29 14:56","value":180944896,"floatValue":180944896},{"timestamp":"05-29 14:57","value":180944896,"floatValue":180944896},{"timestamp":"05-29 14:58","value":180944896,"floatValue":180944896},{"timestamp":"05-29 14:59","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:00","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:01","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:02","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:03","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:04","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:05","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:06","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:07","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:08","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:09","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:10","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:11","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:12","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:13","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:14","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:15","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:16","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:17","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:18","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:19","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:20","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:21","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:22","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:23","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:24","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:25","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:26","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:27","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:28","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:29","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:30","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:31","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:32","value":180944896,"floatValue":180944896},{"timestamp":"05-29 15:33","value":180944896,"floatValue":180944896}],"statusCode":200}]}
+        var data = [datas.containerName]
+        var tickValues = [datas.containerName]
+
+        var metrics = datas["data"][0]["metrics"]
+
+        var label = []
+        for(var a=0; a<metrics.length; a++){
+            tickValues.push(metrics[a]["timestamp"])
+            var datetime = metrics[a]["timestamp"]//.split(" ").join("-17") + ":00"
+            label.push(datetime)
+
+            data.push((parseInt(metrics[a]["floatValue"])/1000000).toString())
+
+        }
+        console.log("tickValues ",tickValues)
+        console.log("label ",label)
+        console.log("data ",data)
+        c3.generate({
+            bindto: '#MEMORY-line-chart',
+            data: {
+                columns: [
+                    data
+                ]
+            },
+            axis: {
+                x: {
+                    type: "category",
+                    categories: label,
+                    tick: {
+                        culling: {
+                            max: 5
+                        },
+                        multiline: false
+                    }
+                },
+                y: {
+                    tick: {
+                        format: function (d) {
+                            return d + " M"
+                        }
+                    }
+                },
+                show: true
+            },
+            grid: {
+                x: {
+                    show: true
+                },
+                y: {
+                    show: true
+                }
+            }
+
+        });
+    }
+    </script>
+</html>

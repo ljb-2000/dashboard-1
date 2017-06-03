@@ -1,0 +1,36 @@
+<div id="rollupdateApp" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModelLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h3 id="myModalLabel">弹性伸缩</h3>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" id="resForm">
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" for="img">镜像:</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" id="img" list="listimg" palceholder="" />
+                                <datalist id="listimg"></datalist>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" for="ver">版本:</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" id="ver" list="listver" palceholder="" disabled="disabled"/>
+                                <datalist id="listver"></datalist>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer" style="text-align: center">
+                <button type="button" class="ant-btn ant-btn-ghost ant-btn-lg cancelBtn" data-dismiss="modal" style="width: 100px" ><span>取 消</span></button>
+                <button type="submit" class="ant-btn ant-btn-primary ant-btn-lg createBtn" id="rollupdate" style="width: 100px"><span>确 定</span></button>
+            </div>
+        </div>
+    </div>
+</div>

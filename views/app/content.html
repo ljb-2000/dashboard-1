@@ -1,0 +1,1069 @@
+<style>
+    .ant-card-bordered {
+        border: 1px solid #d9d9d9;
+        border-color: #e9e9e9;
+    }
+    .ant-card {
+        background: #fff;
+        border-radius: 4px;
+        font-size: 12px;
+        position: relative;
+        overflow: hidden;
+        -webkit-transition: all .3s;
+        transition: all .3s;
+    }
+    .ant-card-body {
+        padding: 24px;
+    }
+    #ContainerDetail .imgBox {
+        float: left;
+        width: 120px;
+        height: 120px;
+        border-radius: 10px;
+        box-shadow: 0 0 5px #c2c2c2;
+    }
+    #ContainerDetail .imgBox svg {
+        width: 118px;
+        height: 118px;
+        border-radius: 10px;
+        padding: 20px;
+    }
+    #ContainerDetail .infoBox {
+        float: left;
+        width: calc(100% - 120px);
+        padding-left: 20px;
+        color: #666;
+    }
+    #ContainerDetail .infoBox .appTitle {
+        font-size: 16px;
+        color: #333;
+    }
+    #ContainerDetail .infoBox .leftInfo {
+        float: left;
+        width: 33%;
+        line-height: 35px;
+    }
+    #ContainerDetail .infoBox .middleInfo {
+        width: 33%;
+        float: left;
+        line-height: 35px;
+    }
+    #ContainerDetail .infoBox .rightInfo {
+        width: 33%;
+        float: left;
+    }
+    .TenxStatus {
+        line-height: 30px;
+    }
+    .TenxStatus .Rebuilding, .TenxStatus .Redeploying, .TenxStatus .Restarting, .TenxStatus .Running, .TenxStatus .Succeeded {
+        color: #33b867;
+        position: relative;
+        top: 5px;
+    }
+    #ContainerDetail .infoBox .middleInfo {
+        width: 33%;
+        float: left;
+        line-height: 35px;
+    }
+    #ContainerDetail .infoBox .rightInfo {
+        width: 33%;
+        float: left;
+    }
+    #ContainerDetail .infoBox .rightInfo .viewBtn {
+        padding-left: 32px;
+        margin-right: 20px;
+    }
+    #ContainerDetailInfo .commonBox {
+        padding-top: 20px;
+        padding-bottom: 10px;
+        width: 70%;
+        min-width: 800px;
+        border-bottom: 1px solid #e5e5e5;
+    }
+    #ContainerDetailInfo .commonBox .titleSpan {
+        padding-left: 10px;
+        display: block;
+        width: 100%;
+        height: 20px;
+        line-height: 20px;
+        font-size: 16px;
+        border-left: 5px solid #00a1ea;
+        color: #333;
+    }
+    #ContainerDetailInfo .commonBox .commonTitle parent {
+        padding-left: 20px;
+        font-size: 12px;
+        color: #999;
+    }
+    #ContainerLogs .bottomBox .introBox .operaBox {
+        position: relative;
+        width: 100%;
+        height: 40px;
+        line-height: 40px;
+        background-color: #3f3f40;
+    }
+    #ContainerLogs .bottomBox .introBox .operaBox span {
+        float: right;
+        margin-right: 20px;
+    }
+    #ContainerLogs .bottomBox .introBox {
+        position: relative;
+        transition: all .3s;
+        width: 100%;
+        height: 500px;
+        overflow-y: auto;
+        background-color: #353535;
+        border-radius: 5px;
+    }
+    #ContainerLogs .bottomBox {
+        top: 350px;
+        left: 200px;
+        width: auto;
+    }
+    #ContainerLogs .bottomBox .introBox .infoBox .logDetail {
+        margin-top: 5px;
+        padding: 0 10px;
+        display: block;
+        width: 100%;
+        min-height: 21px;
+        white-space: normal;
+        word-break: break-word;
+        color: #e9e9e9;
+        background-color: #444;
+    }
+    #ContainerLogs .bottomBox .introBox .infoBox {
+        padding-left: 0;
+        width: 100%;
+        height: 420px;
+        overflow: auto;
+        color: #37fc34;
+    }
+    #ContainerDetail .infoBox {
+        float: left;
+        width: calc(100% - 120px);
+        padding-left: 20px;
+        color: #666;
+    }
+
+
+
+</style>
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>容器服务<small>容器&服务</small>
+            <button id="ContainerDetailButton"  href="#" class="btn btn-success"
+                    onclick="$('#containerContent').show();$('#ContainerDetail').hide();$('#ContainerDetailButton').hide();" style="display: none">
+                <i class="fa fa-backward"></i> BACK
+            </button>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i>容器服务</a></li>
+            <li><a href="#">容器&服务</a></li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content" id="MainContent">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box">
+                    <div class="box-header" id="tool-bar">
+                        <!--<button id="createapp" href="#" class="btn btn-success waves-effect waves-light">-->
+                            <!--<i class="fa fa-plus"></i> 创建-->
+                        <!--</button>-->
+                        <button id="startapp" href="#" class="btn btn-default chk-btn">
+                            <i class="fa fa-play"></i> 启动
+                        </button>
+                        <button id="stopapp" href="#" class="btn btn-warning chk-btn">
+                            <i class="fa fa-stop"></i> 停止
+                        </button>
+                        <button id="tb_refresh" href="#" class="btn btn-default chk-btn">
+                            <i class="fa fa-refresh"></i> 刷新
+                        </button>
+                        <button id="deleteapp" href="#" class="btn btn-default chk-btn">
+                            <i class="fa fa-trash-o"></i> 删除
+                        </button>
+                        <div class="btn-group">
+                            <button type="button" id="more" class="btn btn-default dropdown-toggle chk-btn" data-toggle="dropdown">
+                                更多操作 <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="#" id="scaleapp">弹性伸缩</a></li>
+                                <li><a href="#" id="rollupdateapp">灰度升级</a></li>
+                                <li><a href="#" id="expensiveapp">动态扩容</a></li>
+                                <!--<li><a href="#" id="redpoyapp">重新部署</a></li>-->
+                            </ul>
+                        </div>
+                        <div class="box-tools" style="top: 12px">
+                            <div class="input-group input-group-sm" style="width: 150px;">
+                                <input type="text" name="table_search" class="form-control pull-right" placeholder="Search">
+                                <div class="input-group-btn">
+                                    <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <table id="table">
+                        </table>
+                    </div>
+                    <!-- /.box-body -->
+                    <!--  <div class="box-footer clearfix">
+                        <ul class="pagination pagination-sm no-margin pull-right">
+                            <li><a href="#">&laquo;</a></li>
+                            <li><a href="#">1</a></li>
+                            <li><a href="#">2</a></li>
+                            <li><a href="#">3</a></li>
+                            <li><a href="#">&raquo;</a></li>
+                        </ul>
+                    </div> -->
+                </div>
+            </div>
+            <!-- /.col -->
+        </div>
+    </section>
+    <!-- /.content -->
+    <section class="content" style="display: none" id="containerContent">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box">
+                    <div class="box-header">
+                        <button  href="#" class="btn btn-success" onclick="$('#containerContent').hide();$('#MainContent').show();refreshTable = setInterval(function () {loadTable()},10000)">
+                            <i class="fa fa-backward"></i> BACK
+                        </button>
+                        <button  href="#" class="btn btn-success">
+                            <i class="fa fa-power-off"></i> 重新分配
+                        </button>
+                        <button  href="#" class="btn btn-success">
+                            <i class="fa fa-refresh"></i> 刷 新
+                        </button>
+                    </div>
+                    <div class="box-body">
+                        <table id="container-table">
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- /.content -->
+    <section class="content" id="ContainerDetail" style="display: none">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box">
+                    <div class="box-tools">
+                        <div class="ant-card topCard ant-card-bordered">
+                            <div class="ant-card-body">
+                                <div class="imgBox">
+                                    <svg>
+                                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#server"></use>
+                                    </svg>
+                                </div>
+                                <div class="infoBox">
+                                    <p class="appTitle">tets-1076887165-wmno3</p>
+                                    <div class="leftInfo">
+                                        <div class="status"><!-- react-text: 136 -->状态：<!-- /react-text -->
+                                            <span style="position: relative; top: -5px;">
+                                                <span class="TenxStatus"><span class="Running">
+                                                    <i class="fa fa-circle"></i><!-- react-text: 141 --> <!-- /react-text -->
+                                                    <span>运行中</span>
+                                                </span>
+                                                </span>
+                                            </span>
+                                        </div>
+                                        <div class="address"><!-- react-text: 144 -->地址： <!-- /react-text --><!-- react-text: 145 -->192.168.181.211<!-- /react-text --></div>
+                                    </div>
+                                    <div class="middleInfo">
+                                        <div class="createDate"><!-- react-text: 148 -->创建： <!-- /react-text --><!-- react-text: 149 -->2017-05-26 11:29:22<!-- /react-text --></div>
+                                    </div>
+                                    <div class="rightInfo">
+                                        <div class="actionBox commonData">
+                                            <button type="button" class="ant-btn ant-btn-primary ant-btn-lg viewBtn" onclick="$('#devterminal').show(0);">
+                                                <svg class="terminal">
+                                                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#terminal"></use>
+                                                </svg>
+                                                <span>登录终端</span>
+                                            </button>
+                                            <button type="button" class="ant-btn ant-btn-ghost ant-btn-lg">
+                                                <i class="fa fa-power-off"></i>
+                                                <span>&nbsp;重新分配</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div style="clear: both;"></div>
+                                </div>
+                                <div style="clear: both;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box">
+                    <div class="box-tools">
+                        <div class="ant-card-body">
+                            <div class="ant-tabs ant-tabs-top ant-tabs-line">
+                                <div role="tablist" class="ant-tabs-bar" tabindex="0">
+                                    <div class="ant-tabs-nav-container ">
+                                        <div class="ant-tabs-nav-wrap">
+                                            <div class="">
+                                                <ul class="nav nav-tabs">
+                                                    <li class="active"><a href="#configuration" data-toggle="tab">配置</a></li>
+                                                    <li><a href="#monitor-tab" data-toggle="tab" onclick="NetworkChart();CPUChart();MemoryChart();">监控</a></li>
+                                                    <li><a href="#log-tab" data-toggle="tab">日志</a></li>
+                                                    <li><a href="#progress-tab" data-toggle="tab">进程</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--<div class="ant-tabs-content __web-inspector-hide-shortcut__ tab-content" >-->
+                                    <!--<div>-->
+                                <div  class="tab-content"  id="ContainerDetailInfo" >
+                                    <div  class="tab-pane fade serverType active in" id="configuration">
+                                        <div class="info commonBox">
+                                            <span class="titleSpan">基本信息</span>
+                                            <div class="titleBox">
+                                                <div class="commonTitle">名称</div>
+                                                <div class="commonTitle">镜像</div>
+                                                <div style="clear: both;"></div>
+                                            </div>
+                                            <div class="dataBox">
+                                                <div class="commonTitle">web1-3771192691-4p4l8</div>
+                                                <div class="commonTitle">index.tenxcloud.com/tenxcloud/lamp:latest</div>
+                                                <div style="clear: both;"></div>
+                                            </div>
+                                        </div>
+                                        <div class="compose commonBox">
+                                            <span class="titleSpan">资源配置</span>
+                                            <div class="titleBox">
+                                                <div class="commonTitle">CPU</div>
+                                                <div class="commonTitle">内存</div>
+                                                <div class="commonTitle">系统盘</div>
+                                                <div style="clear: both;"></div>
+                                            </div>
+                                            <div class="dataBox">
+                                                <div class="commonTitle">1 CPU（共享）</div>
+                                                <div class="commonTitle">512M</div>
+                                                <div class="commonTitle">10G</div>
+                                                <div style="clear: both;"></div>
+                                            </div>
+                                        </div>
+                                        <div class="environment commonBox">
+                                            <span class="titleSpan">环境变量</span>
+                                            <div class="titleBox">
+                                                <div class="commonTitle">变量名</div>
+                                                <div class="commonTitle">变量值</div>
+                                                <div style="clear: both;"></div>
+                                            </div><div class="dataBox">
+                                            <div><div class="commonTitle">PATH</div>
+                                                <div class="commonTitle" style="width: 66%;">/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin</div>
+                                                <div style="clear: both;"></div>
+                                            </div>
+                                            <div>
+                                                <div class="commonTitle">DEBIAN_FRONTEND</div>
+                                                <div class="commonTitle" style="width: 66%;">noninteractive</div>
+                                                <div style="clear: both;"></div>
+                                            </div>
+                                            <div>
+                                                <div class="commonTitle">PHP_UPLOAD_MAX_FILESIZE</div>
+                                                <div class="commonTitle" style="width: 66%;">10M</div>
+                                                <div style="clear: both;"></div>
+                                            </div>
+                                            <div>
+                                                <div class="commonTitle">PHP_POST_MAX_SIZE</div>
+                                                <div class="commonTitle" style="width: 66%;">10M</div>
+                                                <div style="clear: both;"></div>
+                                            </div>
+                                            <div>
+                                                <div class="commonTitle">MYSQL_USER</div>
+                                                <div class="commonTitle" style="width: 66%;">admin</div>
+                                                <div style="clear: both;"></div>
+                                            </div>
+                                            <div>
+                                                <div class="commonTitle">AUTHORIZED_KEYS</div>
+                                                <div class="commonTitle" style="width: 66%;">**None**</div>
+                                                <div style="clear: both;"></div>
+                                            </div>
+                                        </div>
+                                        </div>
+                                        <div class="storage commonBox">
+                                            <span class="titleSpan">存储卷</span>
+                                            <div class="titleBox">
+                                                <div class="commonTitle">名称</div>
+                                                <div class="commonTitle">存储类型</div>
+                                                <div class="commonTitle">挂载点</div>
+                                                <div style="clear: both;"></div>
+                                            </div>
+                                            <div class="dataBox"></div>
+                                        </div>
+                                        <div class="storage commonBox">
+                                            <span class="titleSpan">服务配置</span>
+                                            <div class="titleBox">
+                                                <div class="commonTitle">配置组</div>
+                                                <div class="commonTitle">配置文件</div>
+                                                <div class="commonTitle">挂载点</div>
+                                                <div style="clear: both;"></div>
+                                            </div><div class="dataBox"></div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade serverType"  id="monitor-tab" >
+                                        <div class="ant-tabs-content">
+                                            <div>
+                                                <div role="tabpanel" aria-hidden="true" class="ant-tabs-tabpane-hidden ant-tabs-tabpane">
+                                                    <div>
+                                                        <div class="info commonBox">
+                                                            <span class="titleSpan">基本信息</span>
+                                                            <div class="titleBox">
+                                                                <div class="commonTitle">名称</div>
+                                                                <div class="commonTitle">镜像</div>
+                                                                <div style="clear: both;"></div>
+                                                            </div>
+                                                            <div class="dataBox">
+                                                                <div class="commonTitle">web1-3771192691-4p4l8</div>
+                                                                <div class="commonTitle">index.tenxcloud.com/tenxcloud/lamp:latest</div>
+                                                                <div style="clear: both;"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="compose commonBox">
+                                                            <span class="titleSpan">资源配置</span>
+                                                            <div class="titleBox">
+                                                                <div class="commonTitle">CPU</div>
+                                                                <div class="commonTitle">内存</div>
+                                                                <div class="commonTitle">系统盘</div>
+                                                                <div style="clear: both;"></div>
+                                                            </div>
+                                                            <div class="dataBox">
+                                                                <div class="commonTitle">1 CPU（共享）</div>
+                                                                <div class="commonTitle">512M</div>
+                                                                <div class="commonTitle">10G</div>
+                                                                <div style="clear: both;"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="environment commonBox">
+                                                            <span class="titleSpan">环境变量</span>
+                                                            <div class="titleBox">
+                                                                <div class="commonTitle">变量名</div>
+                                                                <div class="commonTitle">变量值</div>
+                                                                <div style="clear: both;"></div>
+                                                            </div>
+                                                            <div class="dataBox">
+                                                                <div>
+                                                                    <div class="commonTitle">PATH</div>
+                                                                    <div class="commonTitle" style="width: 66%;">/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin</div>
+                                                                    <div style="clear: both;"></div>
+                                                                </div>
+                                                                <div>
+                                                                    <div class="commonTitle">DEBIAN_FRONTEND</div>
+                                                                    <div class="commonTitle" style="width: 66%;">noninteractive</div>
+                                                                    <div style="clear: both;"></div>
+                                                                </div>
+                                                                <div>
+                                                                    <div class="commonTitle">PHP_UPLOAD_MAX_FILESIZE</div>
+                                                                    <div class="commonTitle" style="width: 66%;">10M</div>
+                                                                    <div style="clear: both;"></div>
+                                                                </div>
+                                                                <div>
+                                                                    <div class="commonTitle">PHP_POST_MAX_SIZE</div>
+                                                                    <div class="commonTitle" style="width: 66%;">10M</div>
+                                                                    <div style="clear: both;"></div>
+                                                                </div>
+                                                                <div>
+                                                                    <div class="commonTitle">MYSQL_USER</div>
+                                                                    <div class="commonTitle" style="width: 66%;">admin</div>
+                                                                    <div style="clear: both;"></div>
+                                                                </div>
+                                                                <div>
+                                                                    <div class="commonTitle">AUTHORIZED_KEYS</div>
+                                                                    <div class="commonTitle" style="width: 66%;">**None**</div>
+                                                                    <div style="clear: both;"></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="storage commonBox">
+                                                            <span class="titleSpan">存储卷</span>
+                                                            <div class="titleBox">
+                                                                <div class="commonTitle">名称</div>
+                                                                <div class="commonTitle">存储类型</div>
+                                                                <div class="commonTitle">挂载点</div>
+                                                                <div style="clear: both;"></div>
+                                                            </div>
+                                                            <div class="dataBox"></div>
+                                                        </div>
+                                                        <div class="storage commonBox">
+                                                            <span class="titleSpan">服务配置</span>
+                                                            <div class="titleBox">
+                                                                <div class="commonTitle">配置组</div>
+                                                                <div class="commonTitle">配置文件</div>
+                                                                <div class="commonTitle">挂载点</div>
+                                                                <div style="clear: both;"></div>
+                                                            </div>
+                                                            <div class="dataBox"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div role="tabpanel" aria-hidden="false" class="ant-tabs-tabpane">
+                                                    <div id="ContainerMonitior">
+                                                        <div id="TimeControl">
+                                                            <div class="ant-radio-group ant-radio-group-large">
+                                                                <label class="ant-radio-button-wrapper ant-radio-button-wrapper-checked">
+                                                                    <span class="ant-radio-button ant-radio-button-checked ant-radio-button ant-radio-button-checked ant-radio-button-checked-1">
+                                                                        <span class="ant-radio-button-inner"></span>
+                                                                        <input type="radio" class="ant-radio-button-input" value="on">
+                                                                    </span>
+                                                                    <span>1小时</span>
+                                                                </label>
+                                                                <label class="ant-radio-button-wrapper">
+                                                                    <span class="ant-radio-button">
+                                                                        <span class="ant-radio-button-inner"></span>
+                                                                        <input type="radio" class="ant-radio-button-input" value="on">
+                                                                    </span>
+                                                                    <span>6小时</span>
+                                                                </label>
+                                                                <label class="ant-radio-button-wrapper">
+                                                                    <span class="ant-radio-button">
+                                                                        <span class="ant-radio-button-inner"></span>
+                                                                        <input type="radio" class="ant-radio-button-input" value="on">
+                                                                    </span>
+                                                                    <span>1天</span>
+                                                                </label>
+                                                                <label class="ant-radio-button-wrapper">
+                                                                    <span class="ant-radio-button">
+                                                                        <span class="ant-radio-button-inner"></span>
+                                                                        <input type="radio" class="ant-radio-button-input" value="on">
+                                                                    </span>
+                                                                    <span>1周</span>
+                                                                </label>
+                                                                <label class="ant-radio-button-wrapper">
+                                                                    <span class="ant-radio-button">
+                                                                        <span class="ant-radio-button-inner"></span>
+                                                                        <input type="radio" class="ant-radio-button-input" value="on">
+                                                                    </span>
+                                                                    <span>1月</span>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-sm-12">
+                                                                <div><h3>CPU</h3></div>
+                                                                <div id="CPU-line-chart" style="width: 100%;height: 300px"></div>
+                                                            </div>
+                                                            <div class="col-sm-12">
+                                                                <div><h3>闪存</h3></div>
+                                                                <div id="MEMORY-line-chart" style="width: 100%;height: 300px"></div>
+                                                            </div>
+                                                            <div class="col-sm-12">
+                                                                <div><h3>网络</h3></div>
+                                                                <div id="NETWORK-line-chart" style="width: 100%;height: 300px"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div role="tabpanel" aria-hidden="true" class="ant-tabs-tabpane-hidden ant-tabs-tabpane">
+                                                    <div>
+                                                        <div class="bottomBox">
+                                                            <div class="introBox">
+                                                                <div class="operaBox">
+                                                                    <span>
+                                                                        <a href="/manange_monitor/query_log?service=web1&amp;instance=web1-3771192691-4p4l8">历史日志</a>
+                                                                    </span>
+                                                                    <span>
+                                                                        <i class="anticon anticon-question-circle-o"></i>
+                                                                    </span>
+                                                                </div>
+                                                                <div class="infoBox">
+                                                                    <pre>
+                                                                        <div class="logDetail">
+                                                                            <span style="color: yellow;"><!-- react-text: 314 -->[<!-- /react-text --><!-- react-text: 315 -->web1<!-- /react-text --><!-- react-text: 316 -->] <!-- /react-text --></span>
+                                                                            <span style="color: orange;"><!-- react-text: 318 -->[<!-- /react-text --><!-- react-text: 319 -->2017-05-26 15:22:45<!-- /react-text --><!-- react-text: 320 -->] <!-- /react-text --></span>
+                                                                            <span> Initialize app directory...</span>
+                                                                        </div>
+                                                                        <div class="logDetail">
+                                                                            <span style="color: yellow;"><!-- react-text: 324 -->[<!-- /react-text --><!-- react-text: 325 -->web1<!-- /react-text --><!-- react-text: 326 -->] <!-- /react-text --></span>
+                                                                            <span style="color: orange;"><!-- react-text: 328 -->[<!-- /react-text --><!-- react-text: 329 -->2017-05-26 15:22:45<!-- /react-text --><!-- react-text: 330 -->] <!-- /react-text --></span><span> =&gt; An empty or uninitialized MySQL volume is detected in /var/lib/mysql</span></div><div class="logDetail">
+                                                                        <span style="color: yellow;"><!-- react-text: 334 -->[<!-- /react-text --><!-- react-text: 335 -->web1<!-- /react-text --><!-- react-text: 336 -->] <!-- /react-text --></span>
+                                                                        <span style="color: orange;"><!-- react-text: 338 -->[<!-- /react-text --><!-- react-text: 339 -->2017-05-26 15:22:45<!-- /react-text --><!-- react-text: 340 -->] <!-- /react-text --></span>
+                                                                        <span> =&gt; Installing MySQL ...</span>
+                                                                    </div>
+                                                                        <div class="logDetail">
+                                                                            <span style="color: yellow;"><!-- react-text: 344 -->[<!-- /react-text --><!-- react-text: 345 -->web1<!-- /react-text --><!-- react-text: 346 -->] <!-- /react-text --></span>
+                                                                            <span style="color: orange;"><!-- react-text: 348 -->[<!-- /react-text --><!-- react-text: 349 -->2017-05-26 15:22:45<!-- /react-text --><!-- react-text: 350 -->] <!-- /react-text --></span>
+                                                                            <span> =&gt; Done!</span>
+                                                                        </div>
+                                                                        <div class="logDetail">
+                                                                            <span style="color: yellow;"><!-- react-text: 354 -->[<!-- /react-text --><!-- react-text: 355 -->web1<!-- /react-text --><!-- react-text: 356 -->] <!-- /react-text --></span>
+                                                                            <span style="color: orange;"><!-- react-text: 358 -->[<!-- /react-text --><!-- react-text: 359 -->2017-05-26 15:22:45<!-- /react-text --><!-- react-text: 360 -->] <!-- /react-text --></span>
+                                                                            <span> =&gt; Waiting for confirmation of MySQL service startup</span>
+                                                                        </div>
+                                                                        <div class="logDetail">
+                                                                            <span style="color: yellow;"><!-- react-text: 364 -->[<!-- /react-text --><!-- react-text: 365 -->web1<!-- /react-text --><!-- react-text: 366 -->] <!-- /react-text --></span>
+                                                                            <span style="color: orange;"><!-- react-text: 368 -->[<!-- /react-text --><!-- react-text: 369 -->2017-05-26 15:22:50<!-- /react-text --><!-- react-text: 370 -->] <!-- /react-text --></span>
+                                                                            <span> =&gt; Creating MySQL admin user with random password</span>
+                                                                        </div>
+                                                                        <div class="logDetail">
+                                                                            <span style="color: yellow;"><!-- react-text: 374 -->[<!-- /react-text --><!-- react-text: 375 -->web1<!-- /react-text --><!-- react-text: 376 -->] <!-- /react-text --></span>
+                                                                            <span style="color: orange;"><!-- react-text: 378 -->[<!-- /react-text --><!-- react-text: 379 -->2017-05-26 15:22:50<!-- /react-text --><!-- react-text: 380 -->] <!-- /react-text --></span>
+                                                                            <span> =&gt; Done!</span>
+                                                                        </div>
+                                                                        <div class="logDetail">
+                                                                            <span style="color: yellow;"><!-- react-text: 384 -->[<!-- /react-text --><!-- react-text: 385 -->web1<!-- /react-text --><!-- react-text: 386 -->] <!-- /react-text --></span>
+                                                                            <span style="color: orange;"><!-- react-text: 388 -->[<!-- /react-text --><!-- react-text: 389 -->2017-05-26 15:22:50<!-- /react-text --><!-- react-text: 390 -->] <!-- /react-text --></span>
+                                                                            <span> ========================================================================</span>
+                                                                        </div>
+                                                                        <div class="logDetail">
+                                                                            <span style="color: yellow;"><!-- react-text: 394 -->[<!-- /react-text --><!-- react-text: 395 -->web1<!-- /react-text --><!-- react-text: 396 -->] <!-- /react-text --></span>
+                                                                            <span style="color: orange;"><!-- react-text: 398 -->[<!-- /react-text --><!-- react-text: 399 -->2017-05-26 15:22:50<!-- /react-text --><!-- react-text: 400 -->] <!-- /react-text --></span>
+                                                                            <span> You can now connect to this MySQL Server using:</span>
+                                                                        </div>
+                                                                        <div class="logDetail">
+                                                                            <span style="color: yellow;"><!-- react-text: 404 -->[<!-- /react-text --><!-- react-text: 405 -->web1<!-- /react-text --><!-- react-text: 406 -->] <!-- /react-text --></span>
+                                                                            <span style="color: orange;"><!-- react-text: 408 -->[<!-- /react-text --><!-- react-text: 409 -->2017-05-26 15:22:50<!-- /react-text --><!-- react-text: 410 -->] <!-- /react-text --></span>
+                                                                            <span> </span>
+                                                                        </div>
+                                                                        <div class="logDetail">
+                                                                            <span style="color: yellow;"><!-- react-text: 414 -->[<!-- /react-text --><!-- react-text: 415 -->web1<!-- /react-text --><!-- react-text: 416 -->] <!-- /react-text --></span>
+                                                                            <span style="color: orange;"><!-- react-text: 418 -->[<!-- /react-text --><!-- react-text: 419 -->2017-05-26 15:22:50<!-- /react-text --><!-- react-text: 420 -->] <!-- /react-text --></span>
+                                                                            <span>     mysql -uadmin -pRx4iQceonsWc -h
+                                                                                <host> -P
+                                                                                    <port></port>
+                                                                                </host>
+                                                                            </span>
+                                                                        </div>
+                                                                        <div class="logDetail">
+                                                                            <span style="color: yellow;"><!-- react-text: 424 -->[<!-- /react-text --><!-- react-text: 425 -->web1<!-- /react-text --><!-- react-text: 426 -->] <!-- /react-text --></span>
+                                                                            <span style="color: orange;"><!-- react-text: 428 -->[<!-- /react-text --><!-- react-text: 429 -->2017-05-26 15:22:50<!-- /react-text --><!-- react-text: 430 -->] <!-- /react-text --></span>
+                                                                            <span> </span>
+                                                                        </div>
+                                                                        <div class="logDetail">
+                                                                            <span style="color: yellow;"><!-- react-text: 434 -->[<!-- /react-text --><!-- react-text: 435 -->web1<!-- /react-text --><!-- react-text: 436 -->] <!-- /react-text --></span>
+                                                                            <span style="color: orange;"><!-- react-text: 438 -->[<!-- /react-text --><!-- react-text: 439 -->2017-05-26 15:22:50<!-- /react-text --><!-- react-text: 440 -->] <!-- /react-text --></span>
+                                                                            <span> Please remember to change the above password as soon as possible!</span>
+                                                                        </div>
+                                                                        <div class="logDetail">
+                                                                            <span style="color: yellow;"><!-- react-text: 444 -->[<!-- /react-text --><!-- react-text: 445 -->web1<!-- /react-text --><!-- react-text: 446 -->] <!-- /react-text --></span>
+                                                                            <span style="color: orange;"><!-- react-text: 448 -->[<!-- /react-text --><!-- react-text: 449 -->2017-05-26 15:22:50<!-- /react-text --><!-- react-text: 450 -->] <!-- /react-text --></span>
+                                                                            <span> MySQL user 'root' has no password but only allows local connections</span>
+                                                                        </div>
+                                                                        <div class="logDetail">
+                                                                            <span style="color: yellow;"><!-- react-text: 454 -->[<!-- /react-text --><!-- react-text: 455 -->web1<!-- /react-text --><!-- react-text: 456 -->] <!-- /react-text --></span>
+                                                                            <span style="color: orange;"><!-- react-text: 458 -->[<!-- /react-text --><!-- react-text: 459 -->2017-05-26 15:22:50<!-- /react-text --><!-- react-text: 460 -->] <!-- /react-text --></span>
+                                                                            <span> ========================================================================</span>
+                                                                        </div>
+                                                                        <div class="logDetail">
+                                                                            <span style="color: yellow;"><!-- react-text: 464 -->[<!-- /react-text --><!-- react-text: 465 -->web1<!-- /react-text --><!-- react-text: 466 -->] <!-- /react-text --></span>
+                                                                            <span style="color: orange;"><!-- react-text: 468 -->[<!-- /react-text --><!-- react-text: 469 -->2017-05-26 15:22:51<!-- /react-text --><!-- react-text: 470 -->] <!-- /react-text --></span>
+                                                                            <span> =&gt; Setting a random password to the root user</span>
+                                                                        </div>
+                                                                        <div class="logDetail">
+                                                                            <span style="color: yellow;"><!-- react-text: 474 -->[<!-- /react-text --><!-- react-text: 475 -->web1<!-- /react-text --><!-- react-text: 476 -->] <!-- /react-text --></span>
+                                                                            <span style="color: orange;"><!-- react-text: 478 -->[<!-- /react-text --><!-- react-text: 479 -->2017-05-26 15:22:51<!-- /react-text --><!-- react-text: 480 -->] <!-- /react-text --></span>
+                                                                            <span> =&gt; Done!</span>
+                                                                        </div>
+                                                                        <div class="logDetail">
+                                                                            <span style="color: yellow;"><!-- react-text: 484 -->[<!-- /react-text --><!-- react-text: 485 -->web1<!-- /react-text --><!-- react-text: 486 -->] <!-- /react-text --></span>
+                                                                            <span style="color: orange;"><!-- react-text: 488 -->[<!-- /react-text --><!-- react-text: 489 -->2017-05-26 15:22:51<!-- /react-text --><!-- react-text: 490 -->] <!-- /react-text --></span>
+                                                                            <span> ========================================================================</span>
+                                                                        </div>
+                                                                        <div class="logDetail">
+                                                                            <span style="color: yellow;"><!-- react-text: 494 -->[<!-- /react-text --><!-- react-text: 495 -->web1<!-- /react-text --><!-- react-text: 496 -->] <!-- /react-text --></span>
+                                                                            <span style="color: orange;"><!-- react-text: 498 -->[<!-- /react-text --><!-- react-text: 499 -->2017-05-26 15:22:51<!-- /react-text --><!-- react-text: 500 -->] <!-- /react-text --></span>
+                                                                            <span> You can now connect to this Ubuntu container via SSH using:</span>
+                                                                        </div>
+                                                                        <div class="logDetail">
+                                                                            <span style="color: yellow;"><!-- react-text: 504 -->[<!-- /react-text --><!-- react-text: 505 -->web1<!-- /react-text --><!-- react-text: 506 -->] <!-- /react-text --></span>
+                                                                            <span style="color: orange;"><!-- react-text: 508 -->[<!-- /react-text --><!-- react-text: 509 -->2017-05-26 15:22:51<!-- /react-text --><!-- react-text: 510 -->] <!-- /react-text --></span>
+                                                                            <span> </span>
+                                                                        </div>
+                                                                        <div class="logDetail">
+                                                                            <span style="color: yellow;"><!-- react-text: 514 -->[<!-- /react-text --><!-- react-text: 515 -->web1<!-- /react-text --><!-- react-text: 516 -->] <!-- /react-text --></span>
+                                                                            <span style="color: orange;"><!-- react-text: 518 -->[<!-- /react-text --><!-- react-text: 519 -->2017-05-26 15:22:51<!-- /react-text --><!-- react-text: 520 -->] <!-- /react-text --></span>
+                                                                            <span>     ssh -p
+                                                                                <port> root@
+                                                                                    <host></host>
+                                                                                </port></span>
+                                                                        </div>
+                                                                        <div class="logDetail">
+                                                                            <span style="color: yellow;"><!-- react-text: 524 -->[<!-- /react-text --><!-- react-text: 525 -->web1<!-- /react-text --><!-- react-text: 526 -->] <!-- /react-text --></span>
+                                                                            <span style="color: orange;"><!-- react-text: 528 -->[<!-- /react-text --><!-- react-text: 529 -->2017-05-26 15:22:51<!-- /react-text --><!-- react-text: 530 -->] <!-- /react-text --></span>
+                                                                            <span> and enter the root password 'KM2lomaR8J9L' when prompted</span>
+                                                                        </div>
+                                                                        <div class="logDetail">
+                                                                            <span style="color: yellow;"><!-- react-text: 534 -->[<!-- /react-text --><!-- react-text: 535 -->web1<!-- /react-text --><!-- react-text: 536 -->] <!-- /react-text --></span>
+                                                                            <span style="color: orange;"><!-- react-text: 538 -->[<!-- /react-text --><!-- react-text: 539 -->2017-05-26 15:22:51<!-- /react-text --><!-- react-text: 540 -->] <!-- /react-text --></span>
+                                                                            <span> </span>
+                                                                        </div>
+                                                                        <div class="logDetail">
+                                                                            <span style="color: yellow;"><!-- react-text: 544 -->[<!-- /react-text --><!-- react-text: 545 -->web1<!-- /react-text --><!-- react-text: 546 -->] <!-- /react-text --></span>
+                                                                            <span style="color: orange;"><!-- react-text: 548 -->[<!-- /react-text --><!-- react-text: 549 -->2017-05-26 15:22:51<!-- /react-text --><!-- react-text: 550 -->] <!-- /react-text --></span>
+                                                                            <span> Please remember to change the above password as soon as possible!</span>
+                                                                        </div>
+                                                                        <div class="logDetail">
+                                                                            <span style="color: yellow;"><!-- react-text: 554 -->[<!-- /react-text --><!-- react-text: 555 -->web1<!-- /react-text --><!-- react-text: 556 -->] <!-- /react-text --></span>
+                                                                            <span style="color: orange;"><!-- react-text: 558 -->[<!-- /react-text --><!-- react-text: 559 -->2017-05-26 15:22:51<!-- /react-text --><!-- react-text: 560 -->] <!-- /react-text --></span>
+                                                                            <span> ========================================================================</span>
+                                                                        </div>
+                                                                        <div class="logDetail">
+                                                                            <span style="color: yellow;"><!-- react-text: 564 -->[<!-- /react-text --><!-- react-text: 565 -->web1<!-- /react-text --><!-- react-text: 566 -->] <!-- /react-text --></span>
+                                                                            <span style="color: orange;"><!-- react-text: 568 -->[<!-- /react-text --><!-- react-text: 569 -->2017-05-26 15:22:52<!-- /react-text --><!-- react-text: 570 -->] <!-- /react-text --></span>
+                                                                            <span> /usr/lib/python2.7/dist-packages/supervisor/options.py:295: UserWarning: Supervisord is running as root and it is searching for its configuration file in default locations (including its current working directory); you probably want to specify a "-c" argument specifying an absolute path to a configuration file for improved security.</span>
+                                                                        </div>
+                                                                        <div class="logDetail">
+                                                                            <span style="color: yellow;"><!-- react-text: 574 -->[<!-- /react-text --><!-- react-text: 575 -->web1<!-- /react-text --><!-- react-text: 576 -->] <!-- /react-text --></span>
+                                                                            <span style="color: orange;"><!-- react-text: 578 -->[<!-- /react-text --><!-- react-text: 579 -->2017-05-26 15:22:52<!-- /react-text --><!-- react-text: 580 -->] <!-- /react-text --></span>
+                                                                            <span>   'Supervisord is running as root and it is searching '</span>
+                                                                        </div>
+                                                                        <div class="logDetail">
+                                                                            <span style="color: yellow;"><!-- react-text: 584 -->[<!-- /react-text --><!-- react-text: 585 -->web1<!-- /react-text --><!-- react-text: 586 -->] <!-- /react-text --></span>
+                                                                            <span style="color: orange;"><!-- react-text: 588 -->[<!-- /react-text --><!-- react-text: 589 -->2017-05-26 15:22:52<!-- /react-text --><!-- react-text: 590 -->] <!-- /react-text --></span>
+                                                                            <span> 2017-05-26 07:22:52,189 CRIT Supervisor running as root (no user in config file)</span>
+                                                                        </div>
+                                                                        <div class="logDetail">
+                                                                            <span style="color: yellow;"><!-- react-text: 594 -->[<!-- /react-text --><!-- react-text: 595 -->web1<!-- /react-text --><!-- react-text: 596 -->] <!-- /react-text --></span>
+                                                                            <span style="color: orange;"><!-- react-text: 598 -->[<!-- /react-text --><!-- react-text: 599 -->2017-05-26 15:22:52<!-- /react-text --><!-- react-text: 600 -->] <!-- /react-text --></span>
+                                                                            <span> 2017-05-26 07:22:52,190 WARN Included extra file "/etc/supervisor/conf.d/supervisord-mysqld.conf" during parsing</span>
+                                                                        </div>
+                                                                        <div class="logDetail">
+                                                                            <span style="color: yellow;"><!-- react-text: 604 -->[<!-- /react-text --><!-- react-text: 605 -->web1<!-- /react-text --><!-- react-text: 606 -->] <!-- /react-text --></span>
+                                                                            <span style="color: orange;"><!-- react-text: 608 -->[<!-- /react-text --><!-- react-text: 609 -->2017-05-26 15:22:52<!-- /react-text --><!-- react-text: 610 -->] <!-- /react-text --></span>
+                                                                            <span> 2017-05-26 07:22:52,190 WARN Included extra file "/etc/supervisor/conf.d/supervisord-apache2.conf" during parsing</span>
+                                                                        </div>
+                                                                        <div class="logDetail">
+                                                                            <span style="color: yellow;"><!-- react-text: 614 -->[<!-- /react-text --><!-- react-text: 615 -->web1<!-- /react-text --><!-- react-text: 616 -->] <!-- /react-text --></span>
+                                                                            <span style="color: orange;"><!-- react-text: 618 -->[<!-- /react-text --><!-- react-text: 619 -->2017-05-26 15:22:52<!-- /react-text --><!-- react-text: 620 -->] <!-- /react-text --></span>
+                                                                            <span> 2017-05-26 07:22:52,220 INFO RPC interface 'supervisor' initialized</span>
+                                                                        </div>
+                                                                        <div class="logDetail">
+                                                                            <span style="color: yellow;"><!-- react-text: 624 -->[<!-- /react-text --><!-- react-text: 625 -->web1<!-- /react-text --><!-- react-text: 626 -->] <!-- /react-text --></span>
+                                                                            <span style="color: orange;"><!-- react-text: 628 -->[<!-- /react-text --><!-- react-text: 629 -->2017-05-26 15:22:52<!-- /react-text --><!-- react-text: 630 -->] <!-- /react-text --></span>
+                                                                            <span> 2017-05-26 07:22:52,220 CRIT Server 'unix_http_server' running without any HTTP authentication checking</span>
+                                                                        </div>
+                                                                        <div class="logDetail">
+                                                                            <span style="color: yellow;"><!-- react-text: 634 -->[<!-- /react-text --><!-- react-text: 635 -->web1<!-- /react-text --><!-- react-text: 636 -->] <!-- /react-text --></span>
+                                                                            <span style="color: orange;"><!-- react-text: 638 -->[<!-- /react-text --><!-- react-text: 639 -->2017-05-26 15:22:52<!-- /react-text --><!-- react-text: 640 -->] <!-- /react-text --></span>
+                                                                            <span> 2017-05-26 07:22:52,220 INFO supervisord started with pid 1</span>
+                                                                        </div>
+                                                                        <div class="logDetail">
+                                                                            <span style="color: yellow;"><!-- react-text: 644 -->[<!-- /react-text --><!-- react-text: 645 -->web1<!-- /react-text --><!-- react-text: 646 -->] <!-- /react-text --></span>
+                                                                            <span style="color: orange;"><!-- react-text: 648 -->[<!-- /react-text --><!-- react-text: 649 -->2017-05-26 15:22:53<!-- /react-text --><!-- react-text: 650 -->] <!-- /react-text --></span>
+                                                                            <span> 2017-05-26 07:22:53,222 INFO spawned: 'mysqld' with pid 444</span>
+                                                                        </div>
+                                                                        <div class="logDetail">
+                                                                            <span style="color: yellow;"><!-- react-text: 654 -->[<!-- /react-text --><!-- react-text: 655 -->web1<!-- /react-text --><!-- react-text: 656 -->] <!-- /react-text --></span>
+                                                                            <span style="color: orange;"><!-- react-text: 658 -->[<!-- /react-text --><!-- react-text: 659 -->2017-05-26 15:22:53<!-- /react-text --><!-- react-text: 660 -->] <!-- /react-text --></span>
+                                                                            <span> 2017-05-26 07:22:53,224 INFO spawned: 'apache2' with pid 445</span>
+                                                                        </div>
+                                                                        <div class="logDetail">
+                                                                            <span style="color: yellow;"><!-- react-text: 664 -->[<!-- /react-text --><!-- react-text: 665 -->web1<!-- /react-text --><!-- react-text: 666 -->] <!-- /react-text --></span>
+                                                                            <span style="color: orange;"><!-- react-text: 668 -->[<!-- /react-text --><!-- react-text: 669 -->2017-05-26 15:22:54<!-- /react-text --><!-- react-text: 670 -->] <!-- /react-text --></span>
+                                                                            <span> 2017-05-26 07:22:54,546 INFO success: mysqld entered RUNNING state, process has stayed up for &gt; than 1 seconds (startsecs)</span>
+                                                                        </div>
+                                                                        <div class="logDetail">
+                                                                            <span style="color: yellow;"><!-- react-text: 674 -->[<!-- /react-text --><!-- react-text: 675 -->web1<!-- /react-text --><!-- react-text: 676 -->] <!-- /react-text --></span>
+                                                                            <span style="color: orange;"><!-- react-text: 678 -->[<!-- /react-text --><!-- react-text: 679 -->2017-05-26 15:22:54<!-- /react-text --><!-- react-text: 680 -->] <!-- /react-text --></span>
+                                                                            <span> 2017-05-26 07:22:54,546 INFO success: apache2 entered RUNNING state, process has stayed up for &gt; than 1 seconds (startsecs)</span>
+                                                                        </div>
+                                                                    </pre>
+                                                                    <pre id="logsBottom"></pre>
+                                                                </div>
+                                                                <div style="clear: both;"></div>
+                                                                <div class="operaBottomBox">
+                                                                    <i class="fa fa-expand"></i>
+                                                                    <i class="fa fa-pause-circle-o"></i>
+                                                                </div>
+                                                            </div>
+                                                            <div style="clear: both;"></div>
+                                                        </div>
+                                                        <div></div>
+                                                    </div>
+                                                </div><!-- react-empty: 255 --><!-- react-empty: 256 -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade serverType"  id="log-tab" >
+                                        <div role="tabpanel" aria-hidden="false" class="ant-tabs-tabpane" id="ContainerLogs">
+                                            <div id="">
+                                                <div class="bottomBox">
+                                                    <div class="introBox">
+                                                        <div class="operaBox">
+                                                            <span>
+                                                                <a href="/manange_monitor/query_log?service=web1&amp;instance=web1-3771192691-4p4l8">历史日志</a>
+                                                            </span>
+                                                            <span>
+                                                                <i class="anticon anticon-question-circle-o"></i>
+                                                            </span>
+                                                        </div>
+                                                        <div class="infoBox"><pre  style="background-color:#666 !important;">
+                                                            <div class="logDetail">
+                                                                <span style="color: yellow;"><!-- react-text: 778 -->[<!-- /react-text --><!-- react-text: 779 -->web1<!-- /react-text --><!-- react-text: 780 -->] <!-- /react-text --></span>
+                                                                <span style="color: orange;"><!-- react-text: 782 -->[<!-- /react-text --><!-- react-text: 783 -->2017-05-26 15:22:45<!-- /react-text --><!-- react-text: 784 -->] <!-- /react-text --></span>
+                                                                <span style="color: rgb(87, 197, 247);"><!-- react-text: 786 -->[<!-- /react-text --><!-- react-text: 787 -->event<!-- /react-text --><!-- react-text: 788 -->] <!-- /react-text --></span>
+                                                                <span> <font>Started container with docker id e757d27785f1</font></span>
+                                                            </div>
+                                                            <div class="logDetail">
+                                                                <span style="color: yellow;"><!-- react-text: 792 -->[<!-- /react-text --><!-- react-text: 793 -->web1<!-- /react-text --><!-- react-text: 794 -->] <!-- /react-text --></span>
+                                                                <span style="color: orange;"><!-- react-text: 796 -->[<!-- /react-text --><!-- react-text: 797 -->2017-05-26 15:22:44<!-- /react-text --><!-- react-text: 798 -->] <!-- /react-text --></span>
+                                                                <span style="color: rgb(87, 197, 247);"><!-- react-text: 800 -->[<!-- /react-text --><!-- react-text: 801 -->event<!-- /react-text --><!-- react-text: 802 -->] <!-- /react-text --></span>
+                                                                <span> <font>Created container with docker id e757d27785f1; Security:[seccomp=unconfined]</font></span></div><div class="logDetail">
+                                                            <span style="color: yellow;"><!-- react-text: 806 -->[<!-- /react-text --><!-- react-text: 807 -->web1<!-- /react-text --><!-- react-text: 808 -->] <!-- /react-text --></span>
+                                                            <span style="color: orange;"><!-- react-text: 810 -->[<!-- /react-text --><!-- react-text: 811 -->2017-05-26 15:22:42<!-- /react-text --><!-- react-text: 812 -->] <!-- /react-text --></span>
+                                                            <span style="color: rgb(87, 197, 247);"><!-- react-text: 814 -->[<!-- /react-text --><!-- react-text: 815 -->event<!-- /react-text --><!-- react-text: 816 -->] <!-- /react-text --></span>
+                                                            <span> <font>Successfully pulled image "index.tenxcloud.com/tenxcloud/lamp:latest"</font></span>
+                                                        </div>
+                                                            <div class="logDetail">
+                                                                <span style="color: yellow;"><!-- react-text: 820 -->[<!-- /react-text --><!-- react-text: 821 -->web1<!-- /react-text --><!-- react-text: 822 -->] <!-- /react-text --></span>
+                                                                <span style="color: orange;"><!-- react-text: 824 -->[<!-- /react-text --><!-- react-text: 825 -->2017-05-26 15:22:40<!-- /react-text --><!-- react-text: 826 -->] <!-- /react-text --></span>
+                                                                <span style="color: rgb(87, 197, 247);"><!-- react-text: 828 -->[<!-- /react-text --><!-- react-text: 829 -->event<!-- /react-text --><!-- react-text: 830 -->] <!-- /react-text --></span>
+                                                                <span> <font>pulling image "index.tenxcloud.com/tenxcloud/lamp:latest"</font></span>
+                                                            </div>
+                                                            <div class="logDetail">
+                                                                <span style="color: yellow;"><!-- react-text: 834 -->[<!-- /react-text --><!-- react-text: 835 -->web1<!-- /react-text --><!-- react-text: 836 -->] <!-- /react-text --></span>
+                                                                <span style="color: orange;"><!-- react-text: 838 -->[<!-- /react-text --><!-- react-text: 839 -->2017-05-26 15:22:37<!-- /react-text --><!-- react-text: 840 -->] <!-- /react-text --></span>
+                                                                <span style="color: rgb(87, 197, 247);"><!-- react-text: 842 -->[<!-- /react-text --><!-- react-text: 843 -->event<!-- /react-text --><!-- react-text: 844 -->] <!-- /react-text --></span>
+                                                                <span> <font>Successfully assigned web1-3771192691-4p4l8 to slave-node-1</font></span>
+                                                            </div>
+                                                        </pre>
+                                                            <pre id="logsBottom"></pre>
+                                                        </div>
+                                                        <div style="clear: both;"></div>
+                                                        <div class="operaBottomBox">
+                                                            <i class="fa fa-expand"></i>
+                                                            <i class="fa fa-pause-circle-o"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div style="clear: both;"></div>
+                                                </div>
+                                                <div></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade serverType"  id="progress-tab" >
+                                        <div role="tabpanel" aria-hidden="false" class="ant-tabs-tabpane">
+                                            <div id="ContainerProgress">
+                                                <span class="titleSpan">进程信息</span>
+                                                <div class=" clearfix">
+                                                    <div class="">
+                                                        <div class="ant-spin">
+                                                            <span class="ant-spin-dot"></span>
+                                                            <div class="ant-spin-text">加载中...</div>
+                                                        </div>
+                                                        <div class="ant-spin-container">
+                                                            <div class="ant-table ant-table-large ant-table-empty ant-table-without-column-header ant-table-scroll-position-left">
+                                                                <div class="ant-table-content">
+                                                                    <div class="">
+                                                                        <span>
+                                                                            <div class="ant-table-body">
+                                                                                <table class="">
+                                                                                    <colgroup>
+                                                                                        <col style="width: 10%; min-width: 10%;">
+                                                                                        <col style="width: 10%; min-width: 10%;">
+                                                                                        <col style="width: 10%; min-width: 10%;">
+                                                                                        <col style="width: 10%; min-width: 10%;">
+                                                                                        <col style="width: 10%; min-width: 10%;">
+                                                                                        <col style="width: 10%; min-width: 10%;">
+                                                                                        <col style="width: 10%; min-width: 10%;">
+                                                                                        <col style="width: 10%; min-width: 10%;">
+                                                                                        <col style="width: 10%; min-width: 10%;">
+                                                                                        <col style="width: 10%; min-width: 10%;">
+                                                                                    </colgroup>
+                                                                                    <thead class="ant-table-thead">
+                                                                                        <tr>
+                                                                                            <th class="">
+                                                                                                <span><!-- react-text: 3396 -->用户名<!-- /react-text --></span>
+                                                                                            </th>
+                                                                                            <th class="">
+                                                                                                <span><!-- react-text: 3399 -->PID<!-- /react-text --></span>
+                                                                                            </th>
+                                                                                            <th class="">
+                                                                                                <span><!-- react-text: 3402 -->CPU<!-- /react-text --></span>
+                                                                                            </th>
+                                                                                            <th class="">
+                                                                                                <span><!-- react-text: 3405 -->MEM<!-- /react-text --></span>
+                                                                                            </th>
+                                                                                            <th class="">
+                                                                                                <span><!-- react-text: 3408 -->占用虚拟内存<!-- /react-text --></span>
+                                                                                            </th>
+                                                                                            <th class="">
+                                                                                                <span><!-- react-text: 3411 -->占用物理内存<!-- /react-text --></span>
+                                                                                            </th>
+                                                                                            <th class="">
+                                                                                                <span><!-- react-text: 3414 -->进程状态<!-- /react-text --></span>
+                                                                                            </th>
+                                                                                            <th class="">
+                                                                                                <span><!-- react-text: 3417 -->启动时间<!-- /react-text --></span>
+                                                                                            </th>
+                                                                                            <th class="">
+                                                                                                <span><!-- react-text: 3420 -->使用CPU时间<!-- /react-text --></span>
+                                                                                            </th>
+                                                                                            <th class="">
+                                                                                                <span><!-- react-text: 3423 -->命令<!-- /react-text --></span>
+                                                                                            </th>
+                                                                                        </tr>
+                                                                                    </thead>
+                                                                                    <tbody class="ant-table-tbody"></tbody>
+                                                                                </table>
+                                                                            </div>
+                                                                        </span>
+                                                                        <div class="ant-table-placeholder">
+                                                                            <span>
+                                                                                <i class="anticon anticon-frown"></i><!-- react-text: 3428 -->暂无数据<!-- /react-text -->
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div><!-- react-empty: 253 --><!-- react-empty: 254 --><!-- react-empty: 255 --><!-- react-empty: 256 -->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="content" id="CreateModel" style="display: none">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box">
+                    <div>
+                        <div class="CreateModel" style="opacity: 1; visibility: visible; transform: translateX(0px);">
+                            <div class="topBox">
+                                <div class="contentBox">
+                                    <div class="fastCreate commonBox selectedBox">
+                                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJYAAACWCAYAAAA8AXHiAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMDY3IDc5LjE1Nzc0NywgMjAxNS8wMy8zMC0yMzo0MDo0MiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjUwQzFDRTVFQkU4OTExRTZBQzM3RjZEMTk1Q0IwRUUxIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjUwQzFDRTVGQkU4OTExRTZBQzM3RjZEMTk1Q0IwRUUxIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6NTBDMUNFNUNCRTg5MTFFNkFDMzdGNkQxOTVDQjBFRTEiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6NTBDMUNFNURCRTg5MTFFNkFDMzdGNkQxOTVDQjBFRTEiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz6CuKOGAAAFsklEQVR42uyda4hUZRjH36ntYnd1u0EotdW2BZYJYbaIpd0EIzL8EPmhO4ikUH0og+pDF7oQERTR5UuQSFiJfUhRv7TdSCXoguUFClvNLAuJLludnpfzHzot69jMOTPnfc/8fvDn7J4Zds6Z85vnfc6ZmXdrSZI4gKI5hKcAEAsQCxALALEAsQCxABALEAsQCwCxALEAsQAQCxALEAsAsQCxALEAEAsQCxALALEAsQCxABALEAsQCwCxICx6OvEgV64eqfrz+OCoZfCsmXdY/GJ1ASfxFCBWkTxkOcUyqN9fsOy2PECPBUDFCo56ZXpOy0U8JYhVJHssf/M0IFa7zgqBHgsQCxALALEAsQCxAKIV62zLJ5Y/LUlkeQ+xwqTf8qnlfMuhEW7/DMumqo8WMe7cm5bDLb9abtA+1CJJnQv14uhBrLAqlmeBZbmGl5i4X8tzLVssRyJWWNv8dqTP+cOWpXpB9Fm2Wo5CrHC52jLcoGke1n1C4BnLHdqu0yw7LCcgVpi8rOHxQP3NAt0nFF603OjST0WcbNluORGxwuNUy1CD24d0n5B4zXK95Jpg2aYKhljQFPtc+lHm0We5foj+y3KcGvo+xMqPryTvdolYqy2Lx1i/1jLLpRd8j9aliPMQKx+XuH+/jJCHXQf5O/5xdpe8r/eqr3rcMnmMF9h0yx+WcZbNlmmIVT63Wl5vcFa4wnJLydvoz0wvshxreX+Mbdzo0ou/TsuNsR6MWpK0//riQb6wWt+A2v/8c83eP0b61Mjn3c+JljmWM/S7v6yxzvJDu7+wWkbFGhr1Ks0KU0+39FwHYnsBf6PXcptlwHKEMqB1vd06FNYc5GW2S98u8pXvKWWb1s1u94OX8SboYEFD23jcaUh9+Ftl2Z/5+a5OXM6I+d31H3GnaTr2hn3MYu2ruAR5K/IO9VTXqFL5tmdegT1c8GK1+onKCVSXhqy3nG45y3J3Zv1vuq3yYg06aAd7LS+pUc9ebliv2xgKIZdcK8p4YN6EBsRqkq85vIjVDiZxeBGr6EqVZM6sqFwlUMXmfXJGKt4aomIVzjccXsRqZ+UCxALEAkAs4KwwP7HN5VBDLA4UMBQCYgFiAdC80xMiFgeKoRAAsaD6Yvlvi6y0/Kys1Dqgx2oZP9Pxh+6/82xeZ7nMpVP3fFnh5t1PXfRYmx/Dz8B8j0u/8dyj+Lm2jnHpfFvzqyrWI5LqHcvNWveK5SrdVuSOd1vz7qeN8ZO5feDSubX8J2Y36QXmZ2j+osoVa46WXqpdmZ/9fFFXMHDk4lpVp58k0Wdaf7vkerrbLjckOJGbXonlJ8kdyUjl5zS91LLE8nuVm/d1Wvpv5vrJXf3MwPWpsdfiR8v4qv+5S//Z+Qatm2JZaLlP6yvdvC9Toz43MxQ6le9lXV4JW+0JfcN+gUv/y8UvGg7H6WTBT5hypnqub6tcsbbo7O8Nnbns18/TdVvRByqmtMoinQztkVhOcj3v0imeHrWcU/WK5XRJYb6DovBzws+yfGdZo3UjqlCTdLa9oayN48p7vCyVVFMy62ZanrS8qhGhtLaA2WbixQ93/hrWR5nLDgtVqT4ue+P42Ey8zbsf7sZLrJssl6tx/yqEneJjM/EyoKq1RGeAfta+4VA2jh4rXqapeT/epTMhD4e0cfRY8eIvNPv/HPaEzgYdYkER3BnyxlVxKEyaDPNnUbFo3mOB5h0QCxALEAsAsQCxALEAEAsQCxALALEAsQCxABALEAsQC6B7xdqrZX+Fj0v/qH1FrA6wSsvllqkVlGqq9s3zVqw7EeNHk/2XMmfqAGyucNXa6tKpiKhYHeJ7ywzLs5adFRRqp/btYu1rlNSShIn1gIoFiAWIBYBYgFiAWACIBYgFiAWAWIBYgFgAiAWIBYgFgFiAWIBYAIgFiAWIBYBYgFiAWACIBYgFiAWAWBAS/wgwAPOuMPXUEAMeAAAAAElFTkSuQmCC">
+                                        <div class="infoBox">
+                                            <p>镜像仓库</p>
+                                            <span>通过镜像仓库创建应用</span>
+                                        </div>
+                                        <svg class="commonSelectedImg">
+                                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#appcreatemodelselect"></use>
+                                        </svg>
+                                        <i class="fa fa-check"></i>
+                                    </div>
+                                    <div class="appStore commonBox">
+                                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJYAAACWCAYAAAA8AXHiAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMDY3IDc5LjE1Nzc0NywgMjAxNS8wMy8zMC0yMzo0MDo0MiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjVFMkJGNzg1QkU4OTExRTY4NTMxODNFQjA3N0M4NUNFIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjVFMkJGNzg2QkU4OTExRTY4NTMxODNFQjA3N0M4NUNFIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6NUUyQkY3ODNCRTg5MTFFNjg1MzE4M0VCMDc3Qzg1Q0UiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6NUUyQkY3ODRCRTg5MTFFNjg1MzE4M0VCMDc3Qzg1Q0UiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz6kD7p1AAAO9klEQVR42uxd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">
+                                        <div class="infoBox">
+                                            <p>应用商店</p>
+                                            <span>通过应用商店创建应用</span>
+                                        </div>
+                                        <svg class="commonSelectedImg">
+                                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#appcreatemodelselect"></use>
+                                        </svg>
+                                        <i class="fa fa-check"></i>
+                                    </div>
+                                    <div class="layout commonBox">
+                                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJYAAACWCAYAAAA8AXHiAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMDY3IDc5LjE1Nzc0NywgMjAxNS8wMy8zMC0yMzo0MDo0MiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjc2NjJFRjQ2QkU4OTExRTZCMzRGRkI0RTZGRjdDQ0YwIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjc2NjJFRjQ3QkU4OTExRTZCMzRGRkI0RTZGRjdDQ0YwIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6NzY2MkVGNDRCRTg5MTFFNkIzNEZGQjRFNkZGN0NDRjAiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6NzY2MkVGNDVCRTg5MTFFNkIzNEZGQjRFNkZGN0NDRjAiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz4bBOboAAAGY0lEQVR42uyd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">
+                                        <div class="infoBox">
+                                            <p>编排文件</p>
+                                            <span>通过编排文件创建应用</span>
+                                        </div>
+                                        <svg class="commonSelectedImg">
+                                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#appcreatemodelselect"></use>
+                                        </svg>
+                                        <i class="fa fa-check"></i>
+                                    </div>
+                                    <div style="clear: both;"></div>
+                                </div>
+                            </div>
+                            <div class="bottomBox">
+                                <a href="#">
+                                    <button type="button" class="ant-btn ant-btn-lg">
+                                        <span>取 消</span>
+                                    </button>
+                                </a>
+                                <button type="button" class="ant-btn ant-btn-primary ant-btn-lg" onclick="createProductNext()">
+                                    <span>下一步</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="content" id="AppDetail" style="display: none">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box">
+                    <div id="ServiceList">
+                        <div class="ServiceList" style="opacity: 1; visibility: visible; transform: translateX(0px);">
+                            <div class="operaBox">
+                                <button type="button" class="ant-btn ant-btn-primary ant-btn-lg" onclick="createProductNext()">
+                                    <i class="fa fa-plus"></i>
+                                    <span>&nbsp; 添加服务</span>
+                                </button>
+                                <button disabled="" type="button" class="ant-btn ant-btn-ghost ant-btn-lg">
+                                    <i class="fa fa-trash"></i>
+                                    <span>&nbsp; 删除</span>
+                                </button>
+                            </div>
+                            <div class="dataBox">
+                                <div class="titleBox">
+                                    <div class="selectIconTitle commonData"><!-- react-text: 639 -->&nbsp;<!-- /react-text -->
+                                        <label class="ant-checkbox-wrapper">
+                                            <span class="ant-checkbox">
+                                                <span class="ant-checkbox-inner"></span>
+                                                <input type="checkbox" class="ant-checkbox-input" value="on">
+                                            </span>
+                                        </label>
+                                    </div>
+                                    <div class="name commonData">服务名称</div>
+                                    <div class="image commonData">镜像</div>
+                                    <div class="resource commonData">计算资源</div>
+                                    <div class="resource commonData">容器数量</div>
+                                    <div class="opera commonData">操作</div>
+                                    <div style="clear: both;"></div>
+                                </div>
+                                <div class="serviceList"><!-- react-empty: 651 --></div>
+                            </div>
+                            <div class="btnBox">
+                                <a href="/app_manage/app_create">
+                                    <button type="button" class="ant-btn ant-btn-primary ant-btn-lg">
+                                        <span>上一步</span>
+                                    </button>
+                                </a>
+                                <a href="/app_manage/app_create/compose_file"></a>
+                                <button type="button" class="ant-btn ant-btn-primary ant-btn-lg">
+                                    <span>下一步</span>
+                                </button>
+                            </div><!-- react-empty: 679 --><!-- react-empty: 680 --><!-- react-empty: 681 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box">
+
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<script>
+    $(document).ready(function () {
+        $(".ant-tabs-tab").each(function () {
+            $(this).on("click",function () {
+                $(".ant-tabs-tab").removeClass("ant-tabs-tab-active")
+                $(this).addClass("ant-tabs-tab-active")
+            })
+        })
+        $(".commonBox").each(function () {
+            $(this).on("click",function () {
+                $(".commonBox ").removeClass("selectedBox")
+                $(this).addClass("selectedBox")
+            })
+        })
+    })
+</script>
